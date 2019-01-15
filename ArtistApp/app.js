@@ -25,6 +25,9 @@ app.get("/homepage", function(req,res){
 	res.render("homepage");
 })
 
+app.get("/forgot_password", function(req,res){
+	res.render("forgot_password");
+})
 
 
 

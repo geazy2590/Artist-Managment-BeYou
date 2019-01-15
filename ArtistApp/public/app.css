@@ -10,7 +10,7 @@
 	text-align: center;
 }
 
-h2{
+.landing_text{
 	font-family: Dancing+Script;
 	text-align: center;
 	font-weight: bold;
@@ -23,3 +23,26 @@ h2{
 	text-align: center;
 }
 
+.sign_up_card {
+	float: none;
+    margin: 10% auto;
+}
+
+.center-hor {
+	float: none;
+    margin: 0 auto;
+}
+
+.center-ver {
+	display: flex;
+  	align-items: center;
+}
+
+.forgot_password {
+	float: right;
+    margin-bottom: 10px;
+}
+
+.card_catalogue {
+	padding: 20px;
+}
