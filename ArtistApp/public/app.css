@@ -1,5 +1,5 @@
 .title{
-	margin-top: 10rem;
+	padding-top: 25%;
 	font-family: 'Dancing Script', cursive;
 	text-align: center;
 	font-weight: bold;
@@ -18,9 +18,8 @@ h2{
 	font-family: 'Charm', cursive;
 }
 
-body{
+.bg_background{
 	background-image: url(https://www.schiller.edu/wp-content/uploads/2017/09/stock_hd_medium.jpg);
 	text-align: center;
-
 }
 
