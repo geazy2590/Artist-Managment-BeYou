@@ -17,7 +17,13 @@ app.get("/authentication", function(req,res){
 	res.render("authentication");
 });
 
+app.get("/signup", function(req,res){
+	res.render("signup");
+});
 
+app.get("/homepage", function(req,res){
+	res.render("homepage");
+})
 
 
 
