@@ -1,0 +1,29 @@
+<% include partials/header %>
+<div class ="container">
+<div class ="row">
+    <h1 class="login_title">SignUp</h1>
+    <div style = "width: 30%; margin: 100px auto;">
+    <form action="/" method = "POST">
+    <div class = "form-group">
+        <input class = "form-control" name = "FirstName" placeholder = "firstname">
+    </div>
+    <div class = "form-group">
+    <input class = "form-control" name = "LastName" placeholder = "lastname">
+    </div>
+    <div class = "form-group">
+    <input class = "form-control" name = "Password" placeholder = "password">
+    </div>
+    <div class = "form-group">
+    <input class = "form-control" name = "Confirm Password" placeholder = "confirm password">
+    </div>
+    <div class = "form-group">
+    <button class = "btn btn-lg btn-primary btn-block">SignUp</button>
+    </div>
+    
+</form>
+<a class ="back" href ="/"> Go Back</a>
+<a class ="auth" href ="/authentication">Login</a>
+</div>
+</div>
+</div>
+<% include partials/footer %>
