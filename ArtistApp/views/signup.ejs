@@ -7,21 +7,61 @@
             <div class="card-body">
                 <form action="/" method = "POST">
                     <h1 class="login_title text-center">SignUp</h1>
-                    <div class = "form-group">
-                        <input class = "form-control" name = "FirstName" placeholder = "Firstname">
+                    <nav>
+                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                      <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Artist</a>
+                      <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Recruiter</a>
                     </div>
-                    <div class = "form-group">
-                        <input class = "form-control" name = "LastName" placeholder = "Lastname">
+                  </nav>
+                  <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class = "form-group">
+                            <input class = "form-control" required="" name = "FirstName" placeholder = "Firstname">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" name = "LastName" placeholder = "Lastname">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" type="email" name = "LastName" placeholder = "Email Address">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" type="text" name = "Artist" placeholder = "Artist Type">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" type="text" name = "Gender" placeholder = "Enter Gender">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" type="text" name = "Hair" placeholder = "Enter Hair Colour">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" type="text" name = "Height" placeholder = "Enter Height (cms)">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" type="password" name = "Password" placeholder = "Password">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" type="password" name = "Confirm Password" placeholder = "Confirm Password">
+                        </div>
                     </div>
-                    <div class = "form-group">
-                        <input class = "form-control" type="email" name = "LastName" placeholder = "Email Address">
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                      <div class = "form-group">
+                            <input class = "form-control" required="" name = "FirstName" placeholder = "Firstname">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" name = "LastName" placeholder = "Lastname">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" type="email" name = "Email" placeholder = "Email Address">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" type="password" name = "Password" placeholder = "Password">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" type="password" name = "Confirm Password" placeholder = "Confirm Password">
+                        </div>
                     </div>
-                    <div class = "form-group">
-                        <input class = "form-control" type="password" name = "Password" placeholder = "Password">
-                    </div>
-                    <div class = "form-group">
-                        <input class = "form-control" type="password" name = "Confirm Password" placeholder = "Confirm Password">
-                    </div>
+                  </div>
+                    
                     <div class = "form-group">
                         <button class = "btn btn-raised btn-success btn-block">SignUp</button>
                     </div>

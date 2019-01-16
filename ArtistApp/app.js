@@ -29,7 +29,9 @@ app.get("/forgot_password", function(req,res){
 	res.render("forgot_password");
 })
 
-
+app.get("/profile", function(req,res){
+	res.render("profile");
+})
 
 app.listen(7000, function(){
    console.log("Server Started"); 
