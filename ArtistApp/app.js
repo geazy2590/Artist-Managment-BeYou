@@ -33,6 +33,10 @@ app.get("/profile", function(req,res){
 	res.render("profile");
 })
 
+app.get("/edit_profile", function(req,res){
+	res.render("edit_profile");
+})
+
 app.listen(7000, function(){
    console.log("Server Started"); 
 });

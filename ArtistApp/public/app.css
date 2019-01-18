@@ -53,3 +53,8 @@
 .profile-align {
 	margin-top: 30px;
 }
+
+.signup_panel {
+	max-height: 400px;
+	overflow: scroll;
+}
