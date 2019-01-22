@@ -168,6 +168,10 @@ function isLoggedIn(req, res, next){
     res.redirect("login");
 }
 
+app.get("/edit_profile", function(req,res){
+	res.render("edit_profile");
+})
+
 app.listen(7000, function(){
    console.log("Server Started"); 
 });
