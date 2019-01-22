@@ -1,0 +1,33 @@
+<% include partials/header %>
+
+<div class = "bg_background"></div>
+<div class="row">
+    <div class="col-md-3 col-xs-12 sign_up_card">
+        <div class="card">
+            <div class="card-body">
+                <form action="/registerrecruiter" method = "POST">
+                    <h1 class="login_title text-center">SignUp</h1>
+
+                      <div class = "form-group">
+                            <input class = "form-control" required="" name = "firstname" placeholder = "Firstname">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" name = "lastname" placeholder = "Lastname">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" type="email" name = "username" placeholder = "Email Address">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" type="password" name = "password" placeholder = "Password">
+                        </div>
+                        <div class = "form-group">
+                            <input class = "form-control" required="" type="password" name = "confirmpassword" placeholder = "Confirm Password">
+                        </div>
+                        <button class = "btn btn-raised btn-success btn-block">SignUp</button>
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+<% include partials/footer %>
+      
