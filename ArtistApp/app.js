@@ -6,9 +6,13 @@ var express 	= require("express"),
      LocalStrategy = require("passport-local"),
      passportLocalMongoose = require("passport-local-mongoose"),
      UserDetail = require("./models/userdetail"),
-     RecUserDetail = require("./models/recuserdetails")
+     RecUserDetail = require("./models/recuserdetails"),
+     fs=require('fs'),
+     multer=require('multer');
 
-mongoose.connect("mongodb://localhost:27017/artist");
+
+mongoose.connect("mongodb://localhost:27017/test");
+
 //app.use(express.static("public"));
 
 
@@ -27,11 +31,9 @@ app.use(require("express-session")({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 passport.use(new LocalStrategy(User.authenticate())); 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
 
 app.get("/", function(req,res){
     res.render("landing");    
@@ -57,7 +59,7 @@ app.post("/register", function(req, res){
 		var haircolor = req.body.haircolor;
 		var height = req.body.Height;
 
-    User.register(new User({username: req.body.username}), req.body.password, function(err, user){
+    User.register(new User({username: req.body.username,  type : 'artist'}), req.body.password, function(err, user){
             if(err){
                 console.log(err);
                 return res.render('register');
@@ -66,15 +68,29 @@ app.post("/register", function(req, res){
             passport.authenticate("local")(req, res, function(){
             
             	saveArtistDetails(username,firstname,lastname,artist,gender,haircolor,height);
-            	res.redirect("/secret");
+            	res.redirect("/add_item");
             });
     });
 });
 
+// passport.use(new LocalStrategy(function(username, password, done) {
+//     User.findOne({ username: username }, function(err, user) {
+//       if (err) return done(err);
+//       if (!user) return done(null, false, { message: 'Incorrect username.' });
+//       user.comparePassword(password, function(err, isMatch) {
+//         if (isMatch) {
+//           return done(null, user);
+//         } else {
+//           return done(null, false, { message: 'Incorrect password.' });
+//         }
+//       });
+//     });
+//   }));
 
 app.get("/registerrecruiter", function(req,res){
 	res.render("registerrecruiter");
 });
+
 
 
 
@@ -84,7 +100,7 @@ app.post("/registerrecruiter", function(req, res){
 		var lastname = req.body.lastname;
 		
 
-    User.register(new User({username: req.body.username}), req.body.password, function(err, user){
+    User.register(new User({username: req.body.username,  type : 'recruiter'}), req.body.password, function(err, user){
             if(err){
                 console.log(err);
                 return res.render('register');
@@ -136,6 +152,37 @@ function saveRecruiterDetails(uname,fname,lname){
 	})
 }
 
+var schema=new mongoose.Schema({
+    item:String
+});
+
+var model1= mongoose.model('todomod',schema);
+
+var storage = multer.diskStorage({
+    destination: 'public/uploads/',
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now()+ '.jpg')
+    }
+})
+
+var upload = multer({ storage: storage });
+
+app.get('/add_item',isLoggedIn, function(request,response){
+    response.render('add_item.ejs');
+});
+
+app.post('/add_item',upload.single('uploaded_file'),function(req,res){
+    console.log(req.body);
+    console.log(req.file);
+    let db_data = {
+        item : req.file.path
+    };
+    
+    model1(db_data ).save(function(err,data){
+            if(err) throw err
+            res.json(data);
+    })
+});
 
 app.get("/forgot_password", function(req,res){
 	res.render("forgot_password");
@@ -148,12 +195,22 @@ app.get("/profile", function(req,res){
 app.get("/login", function(req,res){
     res.render("login"); 
 });
-//login logic
-app.post("/login",passport.authenticate("local", {
-    successRedirect: "/secret",
+
+
+//login logic  requireArtist(),
+app.post("/login", passport.authenticate("local",
+{
+    // res.redirect("/");
+    // successRedirect: "/secret",
     failureRedirect: "/"
+
 }), function(req,res){
-    
+    if(req.user.type == 'artist'){
+        res.redirect("/add_item");
+    }
+    else{
+        res.redirect("/secret");
+    }
 });
 
 app.get("/logout", function(req, res) {
@@ -166,11 +223,11 @@ function isLoggedIn(req, res, next){
         return next();
     }
     res.redirect("login");
-}
+};
 
 app.get("/edit_profile", function(req,res){
 	res.render("edit_profile");
-})
+});
 
 app.listen(7000, function(){
    console.log("Server Started"); 
