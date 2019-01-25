@@ -1,7 +1,6 @@
 <% include partials/header %>
 <% include partials/navbar %>
 
-
 <div class="col-md-12 col-xs-12 profile-align">
 	<div class="row">
 		<div class="col-md-6 col-xs-12">
@@ -35,28 +34,28 @@
 		<div class="col-md-6 col-xs-12">
 			<div class="card">
 				<div class="card-body">
-					<h2> Artist Name </h2>
+					<h2> <%= artists.details.firstname %>  <%= artists.details.lastname %> </h2>
 					<table class="table">
 					  <tbody>
 					    <tr>
 					      <th scope="row">Gender</th>
-					      <td>Male</td>
+					      <td><%= artists.details.gender %> </td>
 					    </tr>
 					    <tr>
 					      <th scope="row">Hair</th>
-					      <td>Brown</td>
+					      <td><%= artists.details.haircolor %></td>
 					    </tr>
 					    <tr>
 					      <th scope="row">Eyes</th>
-					      <td>Brown</td>
+					      <td><%= artists.details.eyecolor %></td>
 					    </tr>
 					    <tr>
 					      <th scope="row">Height</th>
-					      <td>6'0"</td>
+					      <td><%= artists.details.height %></td>
 					    </tr>
 					    <tr>
 					      <th scope="row">Shoe</th>
-					      <td>10</td>
+					      <td><%= artists.details.shoe %></td>
 					    </tr>
 					  </tbody>
 					</table>

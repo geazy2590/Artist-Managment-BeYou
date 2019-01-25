@@ -7,8 +7,10 @@ var UserDetail = {
     	lastname: String,
     	artist: String,
     	gender: String,
-    	haircolor: String,
-    	Height: Number
+		haircolor: String,
+		eyecolor:String,
+		shoe: String,
+    	height: Number
 		}
 }
 var UserDetailShema = new mongoose.Schema(UserDetail);
