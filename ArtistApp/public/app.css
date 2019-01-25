@@ -6,8 +6,9 @@
 	font-size: 5rem;
 }
 
-.login_title > h1 {
+.login_title  {
 	text-align: center;
+	margin-top: 15px;
 }
 
 .landing_text{
@@ -48,6 +49,11 @@
 
 .card_catalogue {
 	padding: 20px 20px 0 20px;
+	margin-bottom: 10px;
+}
+
+.each_card {
+	margin-bottom: 20px;
 }
 
 .profile-align {
@@ -57,4 +63,14 @@
 .signup_panel {
 	max-height: 400px;
 	overflow: scroll;
+}
+
+.register_card {
+	padding: 0 15px;
+}
+
+.scrollable_card {
+	max-height: 500px;
+	overflow: scroll;
+	padding: 0 5px;
 }

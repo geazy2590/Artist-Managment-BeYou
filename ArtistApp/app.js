@@ -38,6 +38,31 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// const upload = multer({ storage }).single('name-of-input-key') 
+
+// // MULTER
+// const multer = require('multer')
+// const storage = multer.diskStorage({
+//   destination: function(req, file, cb) {
+//     cb(null, 'uploads/')
+//   },
+//   filename: function(req, file, cb) {
+//     console.log(file)
+//     cb(null, file.originalname)
+//   }
+// })
+
+
+app.post('/upload', (req, res, next) => {
+  const upload = multer({ storage }).single('name-of-input-key')
+  upload(req, res, function(err) {
+    if (err) {
+      return res.send(err)
+    }
+    res.json(req.file)
+  })
+})
+
 app.get("/", function (req, res) {
     res.render('landing');
 });
@@ -66,7 +91,10 @@ app.post("/register", function (req, res) {
     var artist = req.body.artist;
     var gender = req.body.gender;
     var haircolor = req.body.haircolor;
-    var height = req.body.Height;
+    var eyecolor = req.body.eyecolor;
+    var shoe = req.body.shoe;
+    var height = req.body.height;
+    var ytlink = req.body.ytlink;
 
     User.register(new User({ username: req.body.username, type: 'artist' }), req.body.password, function (err, user) {
         if (err) {
@@ -76,25 +104,12 @@ app.post("/register", function (req, res) {
         }
         passport.authenticate("local")(req, res, function () {
 
-            saveArtistDetails(username, firstname, lastname, artist, gender, haircolor, height);
-            res.redirect("/add_item");
+            saveArtistDetails(username, firstname, lastname, artist, gender, haircolor, eyecolor, shoe, height, ytlink);
+            console.log(res.details);
+            res.redirect("/profile");
         });
     });
 });
-
-// passport.use(new LocalStrategy(function(username, password, done) {
-//     User.findOne({ username: username }, function(err, user) {
-//       if (err) return done(err);
-//       if (!user) return done(null, false, { message: 'Incorrect username.' });
-//       user.comparePassword(password, function(err, isMatch) {
-//         if (isMatch) {
-//           return done(null, user);
-//         } else {
-//           return done(null, false, { message: 'Incorrect password.' });
-//         }
-//       });
-//     });
-//   }));
 
 app.get("/registerrecruiter", function (req, res) {
     res.render("registerrecruiter");
@@ -120,7 +135,7 @@ app.post("/registerrecruiter", function (req, res) {
     });
 });
 
-function saveArtistDetails(uname, fname, lname, artist, gender, haircolor, eyecolor, shoe, height) {
+function saveArtistDetails(uname, fname, lname, artist, gender, haircolor, eyecolor, shoe, height, ytlink) {
     var newUser = {
         username: uname,
         type: "artist",
@@ -133,6 +148,7 @@ function saveArtistDetails(uname, fname, lname, artist, gender, haircolor, eyeco
             eyecolor: eyecolor,
             shoe: shoe,
             height: height,
+            ytlink: ytlink
 
         }
     }
@@ -221,8 +237,11 @@ function isLoggedIn(req, res, next) {
     res.redirect("login");
 };
 
-app.get("/edit_profile", function (req, res) {
-    res.render("edit_profile");
+app.get("/edit_profile/:username", function (req, res) {
+    var username = req.params.username;
+    UserDetail.findOne({"username": username}, function(e,user){
+        res.render('edit_profile', { "user": user });
+    });
 });
 
 app.listen(7000, function () {
