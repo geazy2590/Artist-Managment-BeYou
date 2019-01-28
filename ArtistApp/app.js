@@ -6,7 +6,19 @@ var express = require("express"),
     LocalStrategy = require("passport-local"),
     passportLocalMongoose = require("passport-local-mongoose"),
     UserDetail = require("./models/userdetail"),
-    RecUserDetail = require("./models/recuserdetails")
+    RecUserDetail = require("./models/recuserdetails"),
+    cloudinary = require('cloudinary')
+    
+    cloudinary.config({ 
+        cloud_name: 'dyketsfb0', 
+        api_key: '529172194236197', 
+        api_secret: 'hVpszTrBfS5ko9cxx8sxFTgeRkY' 
+      });
+
+      cloudinary.v2.uploader.upload("/Users/akshaykumar/Desktop/bluesocks.jpeg", 
+  function(error, result) {console.log(result, error)});
+
+  cloudinary.image("socks.jpg", { alt: "Sample Image" })
 
 mongoose.connect("mongodb://localhost:27017/artist");
 var db = mongoose.connection;
@@ -66,6 +78,8 @@ app.post("/register", function (req, res) {
     var artist = req.body.artist;
     var gender = req.body.gender;
     var haircolor = req.body.haircolor;
+    var eyecolor = req.body.eyecolor;
+    var shoe = req.body.shoe;
     var height = req.body.Height;
 
     User.register(new User({ username: req.body.username, type: 'artist' }), req.body.password, function (err, user) {
@@ -164,6 +178,7 @@ function saveRecruiterDetails(uname,fname,lname){
 app.get('/add_item', isLoggedIn, function (request, response) {
     response.render('add_item.ejs');
 });
+
 
 // app.post('/add_item', upload.single('uploaded_file'), function (req, res) {
 //     console.log(req.body);

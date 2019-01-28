@@ -7,4 +7,11 @@ var ItemSchema = new mongoose.Schema(
         { data: Buffer, contentType: String }
     }
   );
+
+  app.use(multer({ dest: '/uploads',
+    rename: function (fieldname, filename) {
+      return filename;
+    },
+   }));
+
   module.exports = mongoose.model('images',ItemSchema);
