@@ -9,7 +9,7 @@ var express = require("express"),
     passportLocalMongoose = require("passport-local-mongoose"),
     UserDetail = require("./models/userdetail"),
     RecUserDetail = require("./models/recuserdetails"),
-    cloudinary = require('cloudinary')
+    cloudinary = require("cloudinary")
     
     cloudinary.config({ 
         cloud_name: 'dyketsfb0', 
