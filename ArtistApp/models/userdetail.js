@@ -12,7 +12,7 @@ var UserDetail = {
 		shoe: String,
 		height: Number,
 		ytlink: String
-		}
+	}
 }
 var UserDetailShema = new mongoose.Schema(UserDetail);
 

@@ -50,21 +50,6 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// const upload = multer({ storage }).single('name-of-input-key') 
-
-// // MULTER
-// const multer = require('multer')
-// const storage = multer.diskStorage({
-//   destination: function(req, file, cb) {
-//     cb(null, 'uploads/')
-//   },
-//   filename: function(req, file, cb) {
-//     console.log(file)
-//     cb(null, file.originalname)
-//   }
-// })
-
-
 app.post('/upload', (req, res, next) => {
   const upload = multer({ storage }).single('name-of-input-key')
   upload(req, res, function(err) {
@@ -79,17 +64,31 @@ app.get("/", function (req, res) {
     res.render('landing');
 });
 
-app.get("/homepage", isLoggedIn, function (req, res) {
-    UserDetail.find({}, function (err, artists) {
-        if (err) {
+app.get("/homepage", isLoggedIn, function(req, res){
+    var type = req.params.artist;
+    UserDetail.find({}, function(err, artists){
+        if(err) {
             console.log(err);
         } else {
             res.render('homepage', {
                 artists: artists
-            });
+            })
         }
     })
-});
+})
+
+app.get("/homepage/:artist", isLoggedIn, function(req, res){
+    var type = req.params.artist;
+    UserDetail.find({'details.artist': type}, function(err, artists){
+        if(err) {
+            console.log(err);
+        } else {
+            res.render('homepage', {
+                artists: artists
+            })
+        }
+    })
+})
 
 app.get("/register", function (req, res) {
     res.render("register");
@@ -118,7 +117,7 @@ app.post("/register", function (req, res) {
 
             saveArtistDetails(username, firstname, lastname, artist, gender, haircolor, eyecolor, shoe, height, ytlink);
             console.log(res.details);
-            res.redirect("/profile");
+            res.redirect("/homepage");
         });
     });
 });
@@ -194,19 +193,6 @@ app.get('/add_item', isLoggedIn, function (request, response) {
 });
 
 
-// app.post('/add_item', upload.single('uploaded_file'), function (req, res) {
-//     console.log(req.body);
-//     console.log(req.file);
-//     let db_data = {
-//         item: req.file.path
-//     };
-
-//     model1(db_data).save(function (err, data) {
-//         if (err) throw err
-//         res.json(data);
-//     })
-// });
-
 app.get("/forgot_password", function (req, res) {
     res.render("forgot_password");
 });
@@ -230,8 +216,11 @@ app.post("/login", passport.authenticate("local",
         failureRedirect: "/"
 
     }), function (req, res) {
+        var username = req.user.username;
         if (req.user.type == 'artist') {
-            res.redirect("/profile");
+            UserDetail.findOne({"username" : username}, function(e, artists){
+                res.render('profile', {"artists": artists})
+            })
         }
         else {
             res.redirect("/homepage");
