@@ -50,20 +50,6 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// const upload = multer({ storage }).single('name-of-input-key') 
-
-// // MULTER
-// const multer = require('multer')
-// const storage = multer.diskStorage({
-//   destination: function(req, file, cb) {
-//     cb(null, 'uploads/')
-//   },
-//   filename: function(req, file, cb) {
-//     console.log(file)
-//     cb(null, file.originalname)
-//   }
-// })
-
 app.post('/upload', (req, res, next) => {
   const upload = multer({ storage }).single('name-of-input-key')
   upload(req, res, function(err) {
@@ -118,12 +104,8 @@ app.post("/register", function (req, res) {
     var haircolor = req.body.haircolor;
     var eyecolor = req.body.eyecolor;
     var shoe = req.body.shoe;
-<<<<<<< HEAD
-    var height = req.body.Height;
-=======
     var height = req.body.height;
     var ytlink = req.body.ytlink;
->>>>>>> 6cdaf606ba92c5dfb297ee245297b3571c992afd
 
     User.register(new User({ username: req.body.username, type: 'artist' }), req.body.password, function (err, user) {
         if (err) {
@@ -210,19 +192,6 @@ app.get('/add_item', isLoggedIn, function (request, response) {
     response.render('add_item.ejs');
 });
 
-
-// app.post('/add_item', upload.single('uploaded_file'), function (req, res) {
-//     console.log(req.body);
-//     console.log(req.file);
-//     let db_data = {
-//         item: req.file.path
-//     };
-
-//     model1(db_data).save(function (err, data) {
-//         if (err) throw err
-//         res.json(data);
-//     })
-// });
 
 app.get("/forgot_password", function (req, res) {
     res.render("forgot_password");
