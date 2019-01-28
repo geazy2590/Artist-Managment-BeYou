@@ -2,6 +2,8 @@ var express = require("express"),
     mongoose = require("mongoose"),
     passport = require("passport"),
     bodyParser = require("body-parser"),
+    flash = require('express-flash-notification'),
+    cookieParser = require('cookie-parser'),
     User = require("./models/user"),
     LocalStrategy = require("passport-local"),
     passportLocalMongoose = require("passport-local-mongoose"),
@@ -15,10 +17,10 @@ var express = require("express"),
         api_secret: 'hVpszTrBfS5ko9cxx8sxFTgeRkY' 
       });
 
-      cloudinary.v2.uploader.upload("/Users/akshaykumar/Desktop/bluesocks.jpeg", 
-  function(error, result) {console.log(result, error)});
+    cloudinary.v2.uploader.upload("/Users/akshaykumar/Desktop/bluesocks.jpeg", 
+    function(error, result) {console.log(result, error)});
 
-  cloudinary.image("socks.jpg", { alt: "Sample Image" })
+    cloudinary.image("socks.jpg", { alt: "Sample Image" })
 
 mongoose.connect("mongodb://localhost:27017/artist");
 var db = mongoose.connection;
@@ -29,6 +31,7 @@ db.once('open', function () {
 
 var app = express();
 app.set("view engine", "ejs");
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
@@ -37,7 +40,7 @@ app.use(require("express-session")({
     resave: false,
     saveUninitialized: false
 }));
-
+app.use(flash(app));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -109,14 +112,12 @@ app.post("/register", function (req, res) {
 
     User.register(new User({ username: req.body.username, type: 'artist' }), req.body.password, function (err, user) {
         if (err) {
-            console.log(err);
+            req.flash("messages", { "error" : "Sign Up failed" });
             return res.render('register');
 
         }
         passport.authenticate("local")(req, res, function () {
-
             saveArtistDetails(username, firstname, lastname, artist, gender, haircolor, eyecolor, shoe, height, ytlink);
-            console.log(res.details);
             res.redirect("/homepage");
         });
     });
@@ -188,44 +189,25 @@ function saveRecruiterDetails(uname,fname,lname){
 	})
 }
 
-app.get('/add_item', isLoggedIn, function (request, response) {
-    response.render('add_item.ejs');
-});
-
-
 app.get("/forgot_password", function (req, res) {
     res.render("forgot_password");
 });
 
-app.get("/profile/:id", function (req, res) {
-    UserDetail.findById(req.params.id, function (err, artists) {
+app.get("/profile/:username", function (req, res) {
+    UserDetail.findById(req.params.username, function (err, artists) {
         res.render('profile', {
             artists: artists
         });
     });
 });
 
-app.get("/login", function (req, res) {
-    res.render("login");
-});
-
-
-//login logic  requireArtist(),
-app.post("/login", passport.authenticate("local",
-    {
-        failureRedirect: "/"
-
-    }), function (req, res) {
-        var username = req.user.username;
-        if (req.user.type == 'artist') {
-            UserDetail.findOne({"username" : username}, function(e, artists){
-                res.render('profile', {"artists": artists})
-            })
-        }
-        else {
-            res.redirect("/homepage");
-        }
-    });
+//login logic
+app.post('/login',
+    passport.authenticate('local', {
+        successRedirect: '/homepage',
+        failureRedirect: '/login',
+        failureFlash: 'Invalid username or password.'                           
+}));
 
 app.get("/logout", function (req, res) {
     req.logout();
