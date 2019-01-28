@@ -52,7 +52,6 @@ passport.deserializeUser(User.deserializeUser());
 //   }
 // })
 
-
 app.post('/upload', (req, res, next) => {
   const upload = multer({ storage }).single('name-of-input-key')
   upload(req, res, function(err) {
@@ -67,17 +66,31 @@ app.get("/", function (req, res) {
     res.render('landing');
 });
 
-app.get("/homepage", isLoggedIn, function (req, res) {
-    UserDetail.find({}, function (err, artists) {
-        if (err) {
+app.get("/homepage", isLoggedIn, function(req, res){
+    var type = req.params.artist;
+    UserDetail.find({}, function(err, artists){
+        if(err) {
             console.log(err);
         } else {
             res.render('homepage', {
                 artists: artists
-            });
+            })
         }
     })
-});
+})
+
+app.get("/homepage/:artist", isLoggedIn, function(req, res){
+    var type = req.params.artist;
+    UserDetail.find({'details.artist': type}, function(err, artists){
+        if(err) {
+            console.log(err);
+        } else {
+            res.render('homepage', {
+                artists: artists
+            })
+        }
+    })
+})
 
 app.get("/register", function (req, res) {
     res.render("register");
@@ -106,7 +119,7 @@ app.post("/register", function (req, res) {
 
             saveArtistDetails(username, firstname, lastname, artist, gender, haircolor, eyecolor, shoe, height, ytlink);
             console.log(res.details);
-            res.redirect("/profile");
+            res.redirect("/homepage");
         });
     });
 });
@@ -217,8 +230,11 @@ app.post("/login", passport.authenticate("local",
         failureRedirect: "/"
 
     }), function (req, res) {
+        var username = req.user.username;
         if (req.user.type == 'artist') {
-            res.redirect("/profile");
+            UserDetail.findOne({"username" : username}, function(e, artists){
+                res.render('profile', {"artists": artists})
+            })
         }
         else {
             res.redirect("/homepage");
