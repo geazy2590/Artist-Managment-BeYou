@@ -7,7 +7,7 @@ var express = require("express"),
     passportLocalMongoose = require("passport-local-mongoose"),
     UserDetail = require("./models/userdetail"),
     RecUserDetail = require("./models/recuserdetails"),
-    cloudinary = require('cloudinary')
+    cloudinary = require("cloudinary")
     
     cloudinary.config({ 
         cloud_name: 'dyketsfb0', 
@@ -105,12 +105,8 @@ app.post("/register", function (req, res) {
     var haircolor = req.body.haircolor;
     var eyecolor = req.body.eyecolor;
     var shoe = req.body.shoe;
-<<<<<<< HEAD
-    var height = req.body.Height;
-=======
     var height = req.body.height;
     var ytlink = req.body.ytlink;
->>>>>>> 6cdaf606ba92c5dfb297ee245297b3571c992afd
 
     User.register(new User({ username: req.body.username, type: 'artist' }), req.body.password, function (err, user) {
         if (err) {
