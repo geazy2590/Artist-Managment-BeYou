@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 var UserDetail = {
+	uid: String,
     username: String,
     type: String,
     details:{

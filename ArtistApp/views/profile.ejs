@@ -1,6 +1,5 @@
 <% include partials/header %>
 <% include partials/navbar %>
-
 <div class="col-md-12 col-xs-12 profile-align">
 	<div class="row">
 		<div class="col-md-6 col-xs-12">
@@ -34,28 +33,28 @@
 		<div class="col-md-6 col-xs-12">
 			<div class="card">
 				<div class="card-body">
-					<h2> <%= artists.details.firstname %>  <%= artists.details.lastname %> </h2>
+					<h2> <%= artists.firstname %>  <%= artists.lastname %> </h2>
 					<table class="table">
 					  <tbody>
 					    <tr>
 					      <th scope="row">Gender</th>
-					      <td><%= artists.details.gender %> </td>
+					      <td><%= artists.gender %> </td>
 					    </tr>
 					    <tr>
 					      <th scope="row">Hair</th>
-					      <td><%= artists.details.haircolor %></td>
+					      <td><%= artists.haircolor %></td>
 					    </tr>
 					    <tr>
 					      <th scope="row">Eyes</th>
-					      <td><%= artists.details.eyecolor %></td>
+					      <td><%= artists.eyecolor %></td>
 					    </tr>
 					    <tr>
 					      <th scope="row">Height</th>
-					      <td><%= artists.details.height %></td>
+					      <td><%= artists.height %></td>
 					    </tr>
 					    <tr>
 					      <th scope="row">Shoe</th>
-					      <td><%= artists.details.shoe %></td>
+					      <td><%= artists.shoe %></td>
 					    </tr>
 					  </tbody>
 					</table>
@@ -65,7 +64,7 @@
 			<div class="card profile-align">
 				<div class="card-body">
 					<p><b>Youtube Links</b></p>
-					<p><a href="<%= artists.details.ytlink %>"><%= artists.details.ytlink %></a></p>
+					<p><a href="<%= artists.ytlink %>"><%= artists.ytlink %></a></p>
 				</div>
 			</div>
 
