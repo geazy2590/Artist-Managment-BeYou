@@ -1,6 +1,74 @@
 <% include partials/header %>
 
 <div class="bg_background"></div>
+<<<<<<< HEAD
+    <div class="row">
+        <div class="col-md-3 col-xs-12 sign_up_card">
+            <div class="card register_card">
+                <form action="/register" method="POST">
+                    <h1 class="login_title text-center">SignUp</h1>
+                    <%= locals.message %>
+                    <div class="card-body scrollable_card">
+                        <div class="form-group">
+                            <input class="form-control" required="" name="firstname" placeholder="Firstname" novalidate>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" required="" name="lastname" placeholder="Lastname" novalidate>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="email" name="username" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label>Artist Type</label>
+                            <select class="form-control" id="ArtistType" name="artist">
+                                <option>Actor</option>
+                                <option>Model</option>
+                                <option>Singer</option>
+                                <option>Musician</option>
+                                <option>Painter</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Select Gender</label>
+                            <select class="form-control" id="Gender" name="gender">
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" required="" type="text" name="haircolor" placeholder="Enter Hair Colour">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" required="" type="text" name="eyecolor" placeholder="Enter eye Colour">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" required="" type="text" name="shoe" placeholder="Enter shoe size">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" required="" type="text" name="height" placeholder="Enter Height (cms)">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control"  type="text" name="ytlink" placeholder="Enter Youtube Link">
+                        </div>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile04" name="image">
+                                <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="password" name="password" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" required="" type="password" name="confirmpassword" placeholder="Confirm Password">
+                        </div>
+                    </div>
+                        <button class = "btn btn-raised btn-success btn-block">SignUp</button>
+                        <p class="text-center"><a href="/">Go Back</a></p>
+                </form>
+            </div>
+=======
 <div class="row">
     <div class="col-md-3 col-xs-12 sign_up_card">
         <div class="card register_card">
@@ -64,8 +132,9 @@
                 </div>
                 <button class="btn btn-raised btn-success btn-block">SignUp</button>
             </form>
+>>>>>>> 0637be7c6387b316657bd14eda7e83706268bf94
         </div>
     </div>
 </div>
-</div>
+
 <% include partials/footer %>
