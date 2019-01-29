@@ -9,3 +9,17 @@
 		<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"></script>
     </head>
 <body>
+
+        <div class="container">
+            
+                <% if(locals.error && locals.error.length> 0){ %>
+                  <div class="alert alert-danger" role="alert">
+                      <%= error %>
+                  </div> 
+                <% } %>
+                <% if(success && success.length> 0){ %>
+                  <div class="alert alert-success" role="alert">
+                      <%= success %>
+                  </div>   
+                  <% } %>
+              </div>
