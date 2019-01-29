@@ -3,8 +3,8 @@ var express = require("express"),
     mongoose = require("mongoose"),
     passport = require("passport"),
     bodyParser = require("body-parser"),
+    flash = require('express-flash-notification'),
     cookieParser = require('cookie-parser'),
-    flash       = require('connect-flash'),
     User = require("./models/user"),
     LocalStrategy = require("passport-local"),
     passportLocalMongoose = require("passport-local-mongoose"),
@@ -28,43 +28,36 @@ db.once('open', function () {
     console.log('Connected to mongodb');
 });
 
-//Initialization of express and body-parser
+//Initialization of express, cookie-parser and body-parser
 var app = express();
 app.set("view engine", "ejs");
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(express.static(__dirname + '/public'));
 
-//use flash
-app.use(flash());
-
 //Express session
-app.use((require("express-session")({
+app.use(require("express-session")({
     secret: "This is the login part",
     resave: false,
     saveUninitialized: false
-})));
+}));
 
-
-
+//Flash notifications
+app.use(flash(app));
 
 //Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+//Storing current user details
+app.use(function (req, res, next) {
+    res.locals.currentUser = req.user;
+    next();
+});
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-//to show the currentUser
-app.use(function(req, res, next){
-    res.locals.currentUser = req.user;
-    res.locals.error = req.flash("error", message);
-    res.locals.success = req.flash("success");
-    next();
-})
 
 //Server port
 app.listen(7000, function () {
@@ -98,8 +91,6 @@ app.post("/register", upload.single("image"), async (req, res) => {
     
     User.register(new User({ uid, username: req.body.username, type: 'artist' }), req.body.password, function (err, user) {
         if (err) {
-            console.log(err);
-            req.flash("error", err.message)
             return res.render('register');
         }
         passport.authenticate("local")(req, res, function () {
@@ -179,24 +170,20 @@ function saveRecruiterDetails(uname,fname,lname){
 app.post('/login',
     passport.authenticate('local', {
         successRedirect: '/homepage',
-        failureRedirect: '/',
-        failureFlash:true                            
+        failureRedirect: '/login',
+        failureFlash: 'Invalid username or password.'                           
 }));
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    // req.flash("error", "Please login first");
     res.redirect("login");
 };
-
-
 
 //Logout
 app.get("/logout", function (req, res) {
     req.logout();
-    req.flash("error", "Logged you out!");
     res.redirect("/");
 });
 
@@ -287,7 +274,3 @@ app.post('/upload', (req, res, next) => {
     res.json(req.file)
   })
 })
-
-
-
-
