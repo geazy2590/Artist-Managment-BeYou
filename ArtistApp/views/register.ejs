@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-md-3 col-xs-12 sign_up_card">
         <div class="card register_card">
-            <form action="/register" method="POST">
+            <form action="/register" method="POST" enctype="multipart/form-data">
                 <h1 class="login_title text-center">SignUp</h1>
                 <div class="card-body scrollable_card">
                     <div class="form-group">
@@ -51,8 +51,8 @@
                     </div>
                     <div class="input-group">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="inputGroupFile04" name="image">
-                            <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+                            <input type="file" accept="image/x-png,image/gif,image/jpeg" class="custom-file-input" id="inputGroupFile04" name="image">
+                            <label class="custom-file-label" for="inputGroupFile04">Upload Image</label>
                         </div>
                     </div>
                     <div class="form-group">

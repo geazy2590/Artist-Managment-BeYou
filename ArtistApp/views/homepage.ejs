@@ -7,7 +7,7 @@
 	<% artists.forEach(function(artist) { %>
 	<div class="col-md-3 col-xs-12 each_card">
 		<div class="card">
-			<img class="card-img-top" src="https://via.placeholder.com/150" alt="Card image cap">
+			<img class="card-img-top" src="<%= artist.details.picture %>" onerror="this.src='https://via.placeholder.com/450';" alt="Card image cap">
 			<div class="card-body">
 			<h5 class="card-title"><%= artist.details.firstname %> <%= artist.details.lastname %></h5>
 			<p class="card-text"><%= artist.details.artist %></p>

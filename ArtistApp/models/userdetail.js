@@ -12,7 +12,8 @@ var UserDetail = {
 		eyecolor: String,
 		shoe: String,
 		height: Number,
-		ytlink: String
+		ytlink: String,
+		picture: String
 	}
 }
 var UserDetailShema = new mongoose.Schema(UserDetail);

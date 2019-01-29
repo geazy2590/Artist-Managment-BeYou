@@ -10,18 +10,15 @@ var express = require("express"),
     passportLocalMongoose = require("passport-local-mongoose"),
     UserDetail = require("./models/userdetail"),
     RecUserDetail = require("./models/recuserdetails"),
-    cloudinary = require("cloudinary")
+    cloudinary = require("cloudinary"),
+    upload = require('./public/js/multer')
     
-    // cloudinary.config({ 
-    //     cloud_name: 'dyketsfb0', 
-    //     api_key: '529172194236197', 
-    //     api_secret: 'hVpszTrBfS5ko9cxx8sxFTgeRkY' 
-    //   });
-
-    // cloudinary.v2.uploader.upload("/Users/akshaykumar/Desktop/bluesocks.jpeg", 
-    // function(error, result) {console.log(result, error)});
-
-    // cloudinary.image("socks.jpg", { alt: "Sample Image" })
+//Cloudinary configuration
+cloudinary.config({ 
+    cloud_name: 'deuwergpo', 
+    api_key: '332151539923165', 
+    api_secret: 'HMGsmERYkU8RUoNsp_dxBgfxT_I' 
+});
 
 mongoose.connect("mongodb://localhost:27017/artist");
 var db = mongoose.connection;
@@ -84,7 +81,8 @@ app.get("/register", function (req, res) {
     res.render("register");
 });
 
-app.post("/register", function (req, res) {
+app.post("/register", upload.single("image"), async (req, res) => {
+    var result = await cloudinary.v2.uploader.upload(req.file.path);
     var uid = Date.now();
     var username = req.body.username;
     var firstname = req.body.firstname;
@@ -96,7 +94,8 @@ app.post("/register", function (req, res) {
     var shoe = req.body.shoe;
     var height = req.body.height;
     var ytlink = req.body.ytlink;
-
+    var picture = result.secure_url;
+    
     User.register(new User({ uid, username: req.body.username, type: 'artist' }), req.body.password, function (err, user) {
         if (err) {
             console.log(err);
@@ -104,13 +103,13 @@ app.post("/register", function (req, res) {
             return res.render('register');
         }
         passport.authenticate("local")(req, res, function () {
-            saveArtistDetails(uid, username, firstname, lastname, artist, gender, haircolor, eyecolor, shoe, height, ytlink);
+            saveArtistDetails(uid, username, firstname, lastname, artist, gender, haircolor, eyecolor, shoe, height, ytlink, picture);
             res.redirect("/homepage");
         });
     });
 });
 
-function saveArtistDetails(uid, uname, fname, lname, artist, gender, haircolor, eyecolor, shoe, height, ytlink) {
+function saveArtistDetails(uid, uname, fname, lname, artist, gender, haircolor, eyecolor, shoe, height, ytlink, picture) {
     var newUser = {
         uid : uid,
         username: uname,
@@ -124,14 +123,14 @@ function saveArtistDetails(uid, uname, fname, lname, artist, gender, haircolor, 
             eyecolor: eyecolor,
             shoe: shoe,
             height: height,
-            ytlink: ytlink
-
+            ytlink: ytlink,
+            picture: picture
         }
     }
     UserDetail.create(newUser, function (err, user) {
         if (err) { console.log(err); }
         else {
-            console.log(user);
+            // console.log(user);
         }
     })
 }
@@ -230,13 +229,13 @@ app.get("/homepage/:artist", isLoggedIn, function(req, res){
 })
 
 //Get Profile for user
-app.get("/profile/:id", function (req, res) {
-    UserDetail.findOne(req.params._id, function (err, artists) {
+app.get("/profile/:_id", function (req, res) {
+    UserDetail.findById({"_id": req.params._id}, function (err, artists) {
         if(err){
             console.log(err)
         } else {
             res.render('profile', {
-                artists: artists.details
+                artists: artists
             });
         }
     });
