@@ -11,7 +11,9 @@ var express = require("express"),
     UserDetail = require("./models/userdetail"),
     RecUserDetail = require("./models/recuserdetails"),
     cloudinary = require("cloudinary"),
-    upload = require('./public/js/multer')
+    upload = require('./public/js/multer'),
+    flash = require('connect-flash'),
+    session = require('express-session')
     
 //Cloudinary configuration
 cloudinary.config({ 
@@ -35,15 +37,19 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
-//Express session
+//Express session middleware
 app.use(require("express-session")({
     secret: "This is the login part",
-    resave: false,
-    saveUninitialized: false
+    resave: true,
+    saveUninitialized: true
 }));
 
-//Flash notifications
-app.use(flash(app));
+//Express messages middleware
+app.use(require('connect-flash')());
+app.use(function (req, res, next) {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
 
 //Passport initialization
 app.use(passport.initialize());
@@ -95,6 +101,7 @@ app.post("/register", upload.single("image"), async (req, res) => {
         }
         passport.authenticate("local")(req, res, function () {
             saveArtistDetails(uid, username, firstname, lastname, artist, gender, haircolor, eyecolor, shoe, height, ytlink, picture);
+            req.flash('success', 'Your artist account has been created. Welcome to Be You!')
             res.redirect("/homepage");
         });
     });
@@ -120,9 +127,6 @@ function saveArtistDetails(uid, uname, fname, lname, artist, gender, haircolor, 
     }
     UserDetail.create(newUser, function (err, user) {
         if (err) { console.log(err); }
-        else {
-            // console.log(user);
-        }
     })
 }
 
@@ -139,11 +143,12 @@ app.post("/registerrecruiter", function (req, res) {
 
     User.register(new User({ username: req.body.username, type: 'recruiter' }), req.body.password, function (err, user) {
         if (err) {
-            console.log(err);
+            req.flash('Error', 'Something went wrong, please try again.')
             return res.render('register');
         }
         passport.authenticate("local")(req, res, function () {
             saveRecruiterDetails(username, firstname, lastname);
+            req.flash('success', 'Your recruiter account has been created. Welcome to Be You!')
             res.redirect("/homepage");
         });
     });
@@ -162,7 +167,6 @@ function saveRecruiterDetails(uname,fname,lname){
 		else{
 			console.log(user);
 		}
-
 	})
 }
 
@@ -170,8 +174,11 @@ function saveRecruiterDetails(uname,fname,lname){
 app.post('/login',
     passport.authenticate('local', {
         successRedirect: '/homepage',
-        failureRedirect: '/login',
-        failureFlash: 'Invalid username or password.'                           
+        successFlash: true,
+        successFlash: "Logged in successfully",
+        failureFlash: true,
+        failureFlash: 'Invalid username or password.', 
+        failureRedirect: '/'                    
 }));
 
 function isLoggedIn(req, res, next) {
@@ -184,6 +191,7 @@ function isLoggedIn(req, res, next) {
 //Logout
 app.get("/logout", function (req, res) {
     req.logout();
+    req.flash('success', 'You have been logged out')
     res.redirect("/");
 });
 
@@ -209,7 +217,7 @@ app.get("/homepage/:artist", isLoggedIn, function(req, res){
             console.log(err);
         } else {
             res.render('homepage', {
-                artists: artists
+                artists: artists,
             })
         }
     })
@@ -254,23 +262,9 @@ app.post('/update_details/:uid', function(req, res){
         if(err){
             console.log(err);
         } else {    
+            req.flash('success', 'Changes to your profile have been successfully saved.')
             res.render("profile", { artists : artists});
         }
     })
 });
 
-//Forgot Password redirection
-app.get("/forgot_password", function (req, res) {
-    res.render("forgot_password");
-});
-
-
-app.post('/upload', (req, res, next) => {
-  const upload = multer({ storage }).single('name-of-input-key')
-  upload(req, res, function(err) {
-    if (err) {
-      return res.send(err)
-    }
-    res.json(req.file)
-  })
-})
