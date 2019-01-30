@@ -3,14 +3,16 @@ var express = require("express"),
     mongoose = require("mongoose"),
     passport = require("passport"),
     bodyParser = require("body-parser"),
-    flash = require('express-flash-notification'),
+    flash = require("connect-flash"),
     cookieParser = require('cookie-parser'),
     User = require("./models/user"),
     LocalStrategy = require("passport-local"),
+    methodOverride = require("method-override"),
     passportLocalMongoose = require("passport-local-mongoose"),
     UserDetail = require("./models/userdetail"),
     RecUserDetail = require("./models/recuserdetails"),
     cloudinary = require("cloudinary"),
+    exphbs = require("express-handlebars"),
     upload = require('./public/js/multer')
     
 //Cloudinary configuration
@@ -31,33 +33,45 @@ db.once('open', function () {
 //Initialization of express, cookie-parser and body-parser
 var app = express();
 app.set("view engine", "ejs");
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+
 app.use(express.static(__dirname + '/public'));
+//for editing and updating user profile
+app.use(methodOverride("_method"));
 
 //Express session
 app.use(require("express-session")({
+    key: 'user_sid',
     secret: "This is the login part",
-    resave: false,
-    saveUninitialized: false
+    resave: true,
+    rolling: true,
+    saveUninitialized: false,
+    cookie  : { maxAge  : new Date(Date.now() + (60 * 1000 * 10)) }
 }));
 
-//Flash notifications
-app.use(flash(app));
+
 
 //Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
+//Flash notifications
+app.use(flash());
 
 //Storing current user details
 app.use(function (req, res, next) {
     res.locals.currentUser = req.user;
+    res.locals.message = req.flash("error");
+    res.locals.message = req.flash("success");
     next();
 });
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+//to show error messages and username on homepage
+
 
 //Server port
 app.listen(7000, function () {
@@ -91,6 +105,7 @@ app.post("/register", upload.single("image"), async (req, res) => {
     
     User.register(new User({ uid, username: req.body.username, type: 'artist' }), req.body.password, function (err, user) {
         if (err) {
+            req.f
             return res.render('register');
         }
         passport.authenticate("local")(req, res, function () {
@@ -140,7 +155,8 @@ app.post("/registerrecruiter", function (req, res) {
     User.register(new User({ username: req.body.username, type: 'recruiter' }), req.body.password, function (err, user) {
         if (err) {
             console.log(err);
-            return res.render('register');
+            req.flash('error', 'testing');
+            return res.render('registerrecruiter');
         }
         passport.authenticate("local")(req, res, function () {
             saveRecruiterDetails(username, firstname, lastname);
@@ -184,6 +200,7 @@ function isLoggedIn(req, res, next) {
 //Logout
 app.get("/logout", function (req, res) {
     req.logout();
+    req.flash("error", "You have Loggedout!!");
     res.redirect("/");
 });
 
@@ -239,7 +256,7 @@ app.get("/edit_profile/:uid", function (req, res) {
     });
 });
 
-app.post('/update_details/:uid', function(req, res){
+app.put('/update_details/:uid', function(req, res){
     var updated = { 
         firstname: req.body.FirstName,
         lastname: req.body.LastName,
