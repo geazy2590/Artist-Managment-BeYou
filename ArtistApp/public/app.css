@@ -74,3 +74,10 @@
 	overflow: scroll;
 	padding: 0 5px;
 }
+
+.notification_card {
+	position: absolute;
+    z-index: 10;
+    right: 0%;
+    top: 15%;
+}

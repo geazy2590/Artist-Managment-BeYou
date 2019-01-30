@@ -12,8 +12,14 @@ var express = require("express"),
     UserDetail = require("./models/userdetail"),
     RecUserDetail = require("./models/recuserdetails"),
     cloudinary = require("cloudinary"),
+<<<<<<< HEAD
     exphbs = require("express-handlebars"),
     upload = require('./public/js/multer')
+=======
+    upload = require('./public/js/multer'),
+    flash = require('connect-flash'),
+    session = require('express-session')
+>>>>>>> 7b22f12d0a7dbe7a614b282f30e6181d12de4124
     
 //Cloudinary configuration
 cloudinary.config({ 
@@ -40,17 +46,29 @@ app.use(express.static(__dirname + '/public'));
 //for editing and updating user profile
 app.use(methodOverride("_method"));
 
-//Express session
+//Express session middleware
 app.use(require("express-session")({
     key: 'user_sid',
     secret: "This is the login part",
     resave: true,
+<<<<<<< HEAD
     rolling: true,
     saveUninitialized: false,
     cookie  : { maxAge  : new Date(Date.now() + (60 * 1000 * 10)) }
 }));
 
 
+=======
+    saveUninitialized: true
+}));
+
+//Express messages middleware
+app.use(require('connect-flash')());
+app.use(function (req, res, next) {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
+>>>>>>> 7b22f12d0a7dbe7a614b282f30e6181d12de4124
 
 //Passport initialization
 app.use(passport.initialize());
@@ -110,6 +128,7 @@ app.post("/register", upload.single("image"), async (req, res) => {
         }
         passport.authenticate("local")(req, res, function () {
             saveArtistDetails(uid, username, firstname, lastname, artist, gender, haircolor, eyecolor, shoe, height, ytlink, picture);
+            req.flash('success', 'Your artist account has been created. Welcome to Be You!')
             res.redirect("/homepage");
         });
     });
@@ -135,9 +154,6 @@ function saveArtistDetails(uid, uname, fname, lname, artist, gender, haircolor, 
     }
     UserDetail.create(newUser, function (err, user) {
         if (err) { console.log(err); }
-        else {
-            // console.log(user);
-        }
     })
 }
 
@@ -154,12 +170,18 @@ app.post("/registerrecruiter", function (req, res) {
 
     User.register(new User({ username: req.body.username, type: 'recruiter' }), req.body.password, function (err, user) {
         if (err) {
+<<<<<<< HEAD
             console.log(err);
             req.flash('error', 'testing');
             return res.render('registerrecruiter');
+=======
+            req.flash('Error', 'Something went wrong, please try again.')
+            return res.render('register');
+>>>>>>> 7b22f12d0a7dbe7a614b282f30e6181d12de4124
         }
         passport.authenticate("local")(req, res, function () {
             saveRecruiterDetails(username, firstname, lastname);
+            req.flash('success', 'Your recruiter account has been created. Welcome to Be You!')
             res.redirect("/homepage");
         });
     });
@@ -178,7 +200,6 @@ function saveRecruiterDetails(uname,fname,lname){
 		else{
 			console.log(user);
 		}
-
 	})
 }
 
@@ -186,8 +207,11 @@ function saveRecruiterDetails(uname,fname,lname){
 app.post('/login',
     passport.authenticate('local', {
         successRedirect: '/homepage',
-        failureRedirect: '/login',
-        failureFlash: 'Invalid username or password.'                           
+        successFlash: true,
+        successFlash: "Logged in successfully",
+        failureFlash: true,
+        failureFlash: 'Invalid username or password.', 
+        failureRedirect: '/'                    
 }));
 
 function isLoggedIn(req, res, next) {
@@ -200,7 +224,11 @@ function isLoggedIn(req, res, next) {
 //Logout
 app.get("/logout", function (req, res) {
     req.logout();
+<<<<<<< HEAD
     req.flash("error", "You have Loggedout!!");
+=======
+    req.flash('success', 'You have been logged out')
+>>>>>>> 7b22f12d0a7dbe7a614b282f30e6181d12de4124
     res.redirect("/");
 });
 
@@ -226,7 +254,7 @@ app.get("/homepage/:artist", isLoggedIn, function(req, res){
             console.log(err);
         } else {
             res.render('homepage', {
-                artists: artists
+                artists: artists,
             })
         }
     })
@@ -271,23 +299,9 @@ app.put('/update_details/:uid', function(req, res){
         if(err){
             console.log(err);
         } else {    
+            req.flash('success', 'Changes to your profile have been successfully saved.')
             res.render("profile", { artists : artists});
         }
     })
 });
 
-//Forgot Password redirection
-app.get("/forgot_password", function (req, res) {
-    res.render("forgot_password");
-});
-
-
-app.post('/upload', (req, res, next) => {
-  const upload = multer({ storage }).single('name-of-input-key')
-  upload(req, res, function(err) {
-    if (err) {
-      return res.send(err)
-    }
-    res.json(req.file)
-  })
-})

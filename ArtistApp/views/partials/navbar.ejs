@@ -6,9 +6,11 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
+      <%if (currentUser.type == 'artist') { %>
       <li class="nav-item">
         <a class="nav-link" href="/edit_profile/<%= currentUser.uid %>">Edit Profile</a>
       </li>
+      <% } %>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Find Artists 
