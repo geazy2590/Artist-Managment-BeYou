@@ -32,3 +32,14 @@
 </nav>
 
 
+ <div class="container">
+            
+  <% if(locals.message && locals.message.length> 0){ %>
+    <div class="alert alert-danger" role="alert">
+        <%= error %>
+    </div> 
+  <% } %>
+ 
+</div>
+
+
