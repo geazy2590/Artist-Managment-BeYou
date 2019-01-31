@@ -8,18 +8,14 @@ var express = require("express"),
     User = require("./models/user"),
     LocalStrategy = require("passport-local"),
     methodOverride = require("method-override"),
+    nodemailer = require('nodemailer'),
     passportLocalMongoose = require("passport-local-mongoose"),
     UserDetail = require("./models/userdetail"),
     RecUserDetail = require("./models/recuserdetails"),
     cloudinary = require("cloudinary"),
-<<<<<<< HEAD
-    exphbs = require("express-handlebars"),
-    upload = require('./public/js/multer')
-=======
     upload = require('./public/js/multer'),
     flash = require('connect-flash'),
     session = require('express-session')
->>>>>>> 7b22f12d0a7dbe7a614b282f30e6181d12de4124
     
 //Cloudinary configuration
 cloudinary.config({ 
@@ -51,16 +47,11 @@ app.use(require("express-session")({
     key: 'user_sid',
     secret: "This is the login part",
     resave: true,
-<<<<<<< HEAD
     rolling: true,
     saveUninitialized: false,
     cookie  : { maxAge  : new Date(Date.now() + (60 * 1000 * 10)) }
 }));
 
-
-=======
-    saveUninitialized: true
-}));
 
 //Express messages middleware
 app.use(require('connect-flash')());
@@ -68,7 +59,6 @@ app.use(function (req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
   next();
 });
->>>>>>> 7b22f12d0a7dbe7a614b282f30e6181d12de4124
 
 //Passport initialization
 app.use(passport.initialize());
@@ -132,6 +122,39 @@ app.post("/register", upload.single("image"), async (req, res) => {
             res.redirect("/homepage");
         });
     });
+    async function main(){
+
+        var account = await nodemailer.createTestAccount();
+      
+        // create reusable transporter object using the default SMTP transport
+        var transporter = nodemailer.createTransport({
+          host: "smtp.googlemail.com",
+          port: 587,
+          secure: false, // true for 465, false for other ports
+          auth: {
+            user: 'akshaykumar771@gmail.com', // generated ethereal user
+            pass: 'virendersehwag' // generated ethereal password
+          }
+        });
+      
+        // setup email data with unicode symbols
+        var mailOptions = {
+          from: '"Artust Management Team 👻" <akshaykumar771@gmail.com>', // sender address
+          to: username, // list of receivers
+          subject: "Registration Confirmed", // Subject line
+          text: "User registration successful!! Welcome to Artist Management App" // plain text body
+                                 // html body
+        };
+      
+        // send mail with defined transport object
+        let info = await transporter.sendMail(mailOptions)
+      
+        console.log("Message sent: %s", info.messageId);
+        // Preview only available when sending through an Ethereal account
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+      }
+      
+      main().catch(console.error);
 });
 
 function saveArtistDetails(uid, uname, fname, lname, artist, gender, haircolor, eyecolor, shoe, height, ytlink, picture) {
@@ -170,14 +193,8 @@ app.post("/registerrecruiter", function (req, res) {
 
     User.register(new User({ username: req.body.username, type: 'recruiter' }), req.body.password, function (err, user) {
         if (err) {
-<<<<<<< HEAD
-            console.log(err);
-            req.flash('error', 'testing');
-            return res.render('registerrecruiter');
-=======
             req.flash('Error', 'Something went wrong, please try again.')
             return res.render('register');
->>>>>>> 7b22f12d0a7dbe7a614b282f30e6181d12de4124
         }
         passport.authenticate("local")(req, res, function () {
             saveRecruiterDetails(username, firstname, lastname);
@@ -224,11 +241,7 @@ function isLoggedIn(req, res, next) {
 //Logout
 app.get("/logout", function (req, res) {
     req.logout();
-<<<<<<< HEAD
-    req.flash("error", "You have Loggedout!!");
-=======
     req.flash('success', 'You have been logged out')
->>>>>>> 7b22f12d0a7dbe7a614b282f30e6181d12de4124
     res.redirect("/");
 });
 
