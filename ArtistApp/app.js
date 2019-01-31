@@ -7,19 +7,14 @@ var express = require("express"),
     cookieParser = require('cookie-parser'),
     User = require("./models/user"),
     LocalStrategy = require("passport-local"),
-    methodOverride = require("method-override"),
     passportLocalMongoose = require("passport-local-mongoose"),
     UserDetail = require("./models/userdetail"),
     RecUserDetail = require("./models/recuserdetails"),
     cloudinary = require("cloudinary"),
-<<<<<<< HEAD
     exphbs = require("express-handlebars"),
-    upload = require('./public/js/multer')
-=======
     upload = require('./public/js/multer'),
     flash = require('connect-flash'),
     session = require('express-session')
->>>>>>> 7b22f12d0a7dbe7a614b282f30e6181d12de4124
     
 //Cloudinary configuration
 cloudinary.config({ 
@@ -44,22 +39,16 @@ app.use(cookieParser());
 
 app.use(express.static(__dirname + '/public'));
 //for editing and updating user profile
-app.use(methodOverride("_method"));
+
 
 //Express session middleware
 app.use(require("express-session")({
     key: 'user_sid',
     secret: "This is the login part",
     resave: true,
-<<<<<<< HEAD
     rolling: true,
     saveUninitialized: false,
     cookie  : { maxAge  : new Date(Date.now() + (60 * 1000 * 10)) }
-}));
-
-
-=======
-    saveUninitialized: true
 }));
 
 //Express messages middleware
@@ -68,7 +57,6 @@ app.use(function (req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
   next();
 });
->>>>>>> 7b22f12d0a7dbe7a614b282f30e6181d12de4124
 
 //Passport initialization
 app.use(passport.initialize());
@@ -170,14 +158,8 @@ app.post("/registerrecruiter", function (req, res) {
 
     User.register(new User({ username: req.body.username, type: 'recruiter' }), req.body.password, function (err, user) {
         if (err) {
-<<<<<<< HEAD
-            console.log(err);
-            req.flash('error', 'testing');
-            return res.render('registerrecruiter');
-=======
             req.flash('Error', 'Something went wrong, please try again.')
             return res.render('register');
->>>>>>> 7b22f12d0a7dbe7a614b282f30e6181d12de4124
         }
         passport.authenticate("local")(req, res, function () {
             saveRecruiterDetails(username, firstname, lastname);
@@ -224,11 +206,7 @@ function isLoggedIn(req, res, next) {
 //Logout
 app.get("/logout", function (req, res) {
     req.logout();
-<<<<<<< HEAD
     req.flash("error", "You have Loggedout!!");
-=======
-    req.flash('success', 'You have been logged out')
->>>>>>> 7b22f12d0a7dbe7a614b282f30e6181d12de4124
     res.redirect("/");
 });
 
