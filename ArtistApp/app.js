@@ -7,6 +7,8 @@ var express = require("express"),
     cookieParser = require('cookie-parser'),
     User = require("./models/user"),
     LocalStrategy = require("passport-local"),
+    methodOverride = require("method-override"),
+    nodemailer = require('nodemailer'),
     passportLocalMongoose = require("passport-local-mongoose"),
     UserDetail = require("./models/userdetail"),
     RecUserDetail = require("./models/recuserdetails"),
@@ -120,6 +122,39 @@ app.post("/register", upload.single("image"), async (req, res) => {
             res.redirect("/homepage");
         });
     });
+    async function main(){
+
+        var account = await nodemailer.createTestAccount();
+      
+        // create reusable transporter object using the default SMTP transport
+        var transporter = nodemailer.createTransport({
+          host: "smtp.googlemail.com",
+          port: 587,
+          secure: false, // true for 465, false for other ports
+          auth: {
+            user: 'akshaykumar771@gmail.com', // generated ethereal user
+            pass: 'virendersehwag' // generated ethereal password
+          }
+        });
+      
+        // setup email data with unicode symbols
+        var mailOptions = {
+          from: '"Artust Management Team 👻" <akshaykumar771@gmail.com>', // sender address
+          to: username, // list of receivers
+          subject: "Registration Confirmed", // Subject line
+          text: "User registration successful!! Welcome to Artist Management App" // plain text body
+                                 // html body
+        };
+      
+        // send mail with defined transport object
+        let info = await transporter.sendMail(mailOptions)
+      
+        console.log("Message sent: %s", info.messageId);
+        // Preview only available when sending through an Ethereal account
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+      }
+      
+      main().catch(console.error);
 });
 
 function saveArtistDetails(uid, uname, fname, lname, artist, gender, haircolor, eyecolor, shoe, height, ytlink, picture) {
@@ -206,7 +241,11 @@ function isLoggedIn(req, res, next) {
 //Logout
 app.get("/logout", function (req, res) {
     req.logout();
+<<<<<<< HEAD
     req.flash("error", "You have Loggedout!!");
+=======
+    req.flash('success', 'You have been logged out')
+>>>>>>> dee03c327e7d7c421ebf8b2aa2ca10d37fb148ff
     res.redirect("/");
 });
 
