@@ -6,11 +6,6 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <%if (currentUser.type == 'artist') { %>
-      <li class="nav-item">
-        <a class="nav-link" href="/edit_profile/<%= currentUser.uid %>">Edit Profile</a>
-      </li>
-      <% } %>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Find Artists 
@@ -24,25 +19,21 @@
         </div>
       </li>
     </ul>
-    <li>Signed in as <%= currentUser.username %></li>
-    <form action="/logout" class="form-inline my-2 my-lg-0">
-      <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit">Logout</button>
-    </form>
+    <ul class="nav navbar-nav navbar-right">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <%= currentUser.username %>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <%if (currentUser.type == 'artist') { %>
+            <a class="dropdown-item" href="/edit_profile/<%= currentUser.uid %>">Edit Profile</a>
+          <% } %>
+          <!-- <a class="dropdown-item" href="/change_password">Change Password</a> -->
+          <a class="dropdown-item" href="/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
   </div>
 </nav>
 
 
-<<<<<<< HEAD
-=======
- <!-- <div class="container">
-            
-  <% if(locals.message && locals.message.length> 0){ %>
-    <div class="alert alert-danger" role="alert">
-        <%= error %>
-    </div> 
-  <% } %>
- 
-</div> -->
-
-
->>>>>>> dee03c327e7d7c421ebf8b2aa2ca10d37fb148ff

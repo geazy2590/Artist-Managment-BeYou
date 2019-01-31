@@ -17,12 +17,12 @@ var express = require("express"),
     upload = require('./public/js/multer'),
     flash = require('connect-flash'),
     session = require('express-session')
-    
+
 //Cloudinary configuration
-cloudinary.config({ 
-    cloud_name: 'deuwergpo', 
-    api_key: '332151539923165', 
-    api_secret: 'HMGsmERYkU8RUoNsp_dxBgfxT_I' 
+cloudinary.config({
+    cloud_name: 'deuwergpo',
+    api_key: '332151539923165',
+    api_secret: 'HMGsmERYkU8RUoNsp_dxBgfxT_I'
 });
 
 mongoose.connect("mongodb://localhost:27017/artist");
@@ -50,14 +50,14 @@ app.use(require("express-session")({
     resave: true,
     rolling: true,
     saveUninitialized: false,
-    cookie  : { maxAge  : new Date(Date.now() + (60 * 1000 * 10)) }
+    cookie: { maxAge: new Date(Date.now() + (60 * 1000 * 10)) }
 }));
 
 //Express messages middleware
 app.use(require('connect-flash')());
 app.use(function (req, res, next) {
-  res.locals.messages = require('express-messages')(req, res);
-  next();
+    res.locals.messages = require('express-messages')(req, res);
+    next();
 });
 
 //Passport initialization
@@ -69,17 +69,13 @@ app.use(flash());
 //Storing current user details
 app.use(function (req, res, next) {
     res.locals.currentUser = req.user;
-    res.locals.message = req.flash("error");
-    res.locals.message = req.flash("success");
+    res.locals.message = req.flash();
     next();
 });
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-//to show error messages and username on homepage
-
 
 //Server port
 app.listen(7000, function () {
@@ -110,7 +106,7 @@ app.post("/register", upload.single("image"), async (req, res) => {
     var height = req.body.height;
     var ytlink = req.body.ytlink;
     var picture = result.secure_url;
-    
+
     User.register(new User({ uid, username: req.body.username, type: 'artist' }), req.body.password, function (err, user) {
         if (err) {
             req.f
@@ -122,44 +118,44 @@ app.post("/register", upload.single("image"), async (req, res) => {
             res.redirect("/homepage");
         });
     });
-    async function main(){
+    async function main() {
 
         var account = await nodemailer.createTestAccount();
-      
+
         // create reusable transporter object using the default SMTP transport
         var transporter = nodemailer.createTransport({
-          host: "smtp.googlemail.com",
-          port: 587,
-          secure: false, // true for 465, false for other ports
-          auth: {
-            user: 'akshaykumar771@gmail.com', // generated ethereal user
-            pass: 'virendersehwag' // generated ethereal password
-          }
+            host: "smtp.googlemail.com",
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+                user: 'akshaykumar771@gmail.com', // generated ethereal user
+                pass: 'virendersehwag' // generated ethereal password
+            }
         });
-      
+
         // setup email data with unicode symbols
         var mailOptions = {
-          from: '"Artust Management Team 👻" <akshaykumar771@gmail.com>', // sender address
-          to: username, // list of receivers
-          subject: "Registration Confirmed", // Subject line
-          text: "User registration successful!! Welcome to Artist Management App" // plain text body
-                                 // html body
+            from: '"Artist Management Team 👻" <akshaykumar771@gmail.com>', // sender address
+            to: username, // list of receivers
+            subject: "Registration Confirmed", // Subject line
+            text: "User registration successful!! Welcome to Artist Management App" // plain text body
+            // html body
         };
-      
+
         // send mail with defined transport object
         let info = await transporter.sendMail(mailOptions)
-      
+
         console.log("Message sent: %s", info.messageId);
         // Preview only available when sending through an Ethereal account
         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-      }
-      
-      main().catch(console.error);
+    }
+
+    main().catch(console.error);
 });
 
 function saveArtistDetails(uid, uname, fname, lname, artist, gender, haircolor, eyecolor, shoe, height, ytlink, picture) {
     var newUser = {
-        uid : uid,
+        uid: uid,
         username: uname,
         type: "artist",
         details: {
@@ -204,20 +200,20 @@ app.post("/registerrecruiter", function (req, res) {
     });
 });
 
-function saveRecruiterDetails(uname,fname,lname){
-	var newUser = {
-    username: uname,
-    type: "recruiter",
-    firstname: fname,
-    lastname: lname,
-		
-	}
-	RecUserDetail.create(newUser, function(err,user){
-		if(err){console.log(err);}
-		else{
-			console.log(user);
-		}
-	})
+function saveRecruiterDetails(uname, fname, lname) {
+    var newUser = {
+        username: uname,
+        type: "recruiter",
+        firstname: fname,
+        lastname: lname,
+
+    }
+    RecUserDetail.create(newUser, function (err, user) {
+        if (err) { console.log(err); }
+        else {
+            console.log(user);
+        }
+    })
 }
 
 //Passport login authentication
@@ -227,9 +223,9 @@ app.post('/login',
         successFlash: true,
         successFlash: "Logged in successfully",
         failureFlash: true,
-        failureFlash: 'Invalid username or password.', 
-        failureRedirect: '/'                    
-}));
+        failureFlash: 'Invalid username or password.',
+        failureRedirect: '/'
+    }));
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -247,10 +243,10 @@ app.get("/logout", function (req, res) {
 
 
 //Show all artists and filter artists on homepage
-app.get("/homepage", isLoggedIn, function(req, res){
+app.get("/homepage", isLoggedIn, function (req, res) {
     var type = req.params.artist;
-    UserDetail.find({}, function(err, artists){
-        if(err) {
+    UserDetail.find({}, function (err, artists) {
+        if (err) {
             console.log(err);
         } else {
             res.render('homepage', {
@@ -260,10 +256,10 @@ app.get("/homepage", isLoggedIn, function(req, res){
     })
 })
 
-app.get("/homepage/:artist", isLoggedIn, function(req, res){
+app.get("/homepage/:artist", isLoggedIn, function (req, res) {
     var type = req.params.artist;
-    UserDetail.find({'details.artist': type}, function(err, artists){
-        if(err) {
+    UserDetail.find({ 'details.artist': type }, function (err, artists) {
+        if (err) {
             console.log(err);
         } else {
             res.render('homepage', {
@@ -275,8 +271,8 @@ app.get("/homepage/:artist", isLoggedIn, function(req, res){
 
 //Get Profile for user
 app.get("/profile/:_id", function (req, res) {
-    UserDetail.findById({"_id": req.params._id}, function (err, artists) {
-        if(err){
+    UserDetail.findById({ "_id": req.params._id }, function (err, artists) {
+        if (err) {
             console.log(err)
         } else {
             res.render('profile', {
@@ -288,8 +284,8 @@ app.get("/profile/:_id", function (req, res) {
 
 //Get Edit profile details for user
 app.get("/edit_profile/:uid", function (req, res) {
-    UserDetail.findOne({"uid": req.params.uid}, function(err, user){
-        if(err){
+    UserDetail.findOne({ "uid": req.params.uid }, function (err, user) {
+        if (err) {
             console.log(err)
         } else {
             res.render('edit_profile', { user: user });
@@ -297,24 +293,26 @@ app.get("/edit_profile/:uid", function (req, res) {
     });
 });
 
-app.put('/update_details/:uid', function(req, res){
-    var updated = { 
+app.post('/update_details/:uid', function (req, res) {
+    var updated = {
         firstname: req.body.FirstName,
         lastname: req.body.LastName,
         username: req.body.Email,
+        artist: req.body.Artist,
+        gender: req.body.Gender,
         haircolor: req.body.Hair,
         eyecolor: req.body.Eyes,
         shoe: req.body.Shoe,
         height: req.body.Height,
         ytlink: req.body.ytlink
     }
-    UserDetail.updateOne({'uid': req.params.uid}, {$set: {details: updated}}, function(err, artists){
-        if(err){
+    console.log(updated)
+    UserDetail.updateOne({ 'uid': req.params.uid }, { $set: { details: updated } }, function (err, artists) {
+        if (err) {
             console.log(err);
-        } else {    
+        } else {
             req.flash('success', 'Changes to your profile have been successfully saved.')
-            res.render("profile", { artists : artists});
+            res.redirect('/homepage');
         }
     })
 });
-
