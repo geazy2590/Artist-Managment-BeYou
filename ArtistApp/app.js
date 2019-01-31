@@ -241,11 +241,7 @@ function isLoggedIn(req, res, next) {
 //Logout
 app.get("/logout", function (req, res) {
     req.logout();
-<<<<<<< HEAD
     req.flash("error", "You have Loggedout!!");
-=======
-    req.flash('success', 'You have been logged out')
->>>>>>> dee03c327e7d7c421ebf8b2aa2ca10d37fb148ff
     res.redirect("/");
 });
 
