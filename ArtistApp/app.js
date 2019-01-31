@@ -13,6 +13,7 @@ var express = require("express"),
     UserDetail = require("./models/userdetail"),
     RecUserDetail = require("./models/recuserdetails"),
     cloudinary = require("cloudinary"),
+    exphbs = require("express-handlebars"),
     upload = require('./public/js/multer'),
     flash = require('connect-flash'),
     session = require('express-session')
@@ -40,7 +41,7 @@ app.use(cookieParser());
 
 app.use(express.static(__dirname + '/public'));
 //for editing and updating user profile
-app.use(methodOverride("_method"));
+
 
 //Express session middleware
 app.use(require("express-session")({
@@ -51,7 +52,6 @@ app.use(require("express-session")({
     saveUninitialized: false,
     cookie  : { maxAge  : new Date(Date.now() + (60 * 1000 * 10)) }
 }));
-
 
 //Express messages middleware
 app.use(require('connect-flash')());
@@ -274,7 +274,7 @@ function isLoggedIn(req, res, next) {
 //Logout
 app.get("/logout", function (req, res) {
     req.logout();
-    req.flash('success', 'You have been logged out')
+    req.flash("error", "You have Loggedout!!");
     res.redirect("/");
 });
 
