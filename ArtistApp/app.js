@@ -264,7 +264,7 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    res.redirect("login");
+    res.redirect("/");
 };
 
 //Logout
@@ -326,7 +326,14 @@ app.get("/edit_profile/:uid", function (req, res) {
     });
 });
 
-app.post('/update_details/:uid', function (req, res) {
+app.post('/update_details/:uid', upload.single("image"), async (req, res) => {
+    if(!req.file) {
+        var new_img = req.body.existing_img;
+        console.log('OLD PIC = ' + new_img);
+    } else {
+        var result = await cloudinary.v2.uploader.upload(req.file.path);
+        var new_img = result.secure_url;
+    }
     var updated = {
         firstname: req.body.FirstName,
         lastname: req.body.LastName,
@@ -337,7 +344,8 @@ app.post('/update_details/:uid', function (req, res) {
         eyecolor: req.body.Eyes,
         shoe: req.body.Shoe,
         height: req.body.Height,
-        ytlink: req.body.ytlink
+        ytlink: req.body.ytlink,
+        picture: new_img
     }
     console.log(updated)
     UserDetail.updateOne({ 'uid': req.params.uid }, { $set: { details: updated } }, function (err, artists) {

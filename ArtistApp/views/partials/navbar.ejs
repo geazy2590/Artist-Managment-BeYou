@@ -16,6 +16,7 @@
           <a class="dropdown-item" href="/homepage/Musician">Musician</a>
           <a class="dropdown-item" href="/homepage/Singer">Singer</a>
           <a class="dropdown-item" href="/homepage/Painter">Painter</a>
+          <a class="dropdown-item" href="/homepage">All</a>
         </div>
       </li>
     </ul>
@@ -28,10 +29,11 @@
           <%if (currentUser.type == 'artist') { %>
             <a class="dropdown-item" href="/edit_profile/<%= currentUser.uid %>">Edit Profile</a>
           <% } %>
-          <!-- <a class="dropdown-item" href="/change_password">Change Password</a> -->
           <a class="dropdown-item" href="/logout">Logout</a>
         </div>
       </li>
     </ul>
   </div>
 </nav>
+
+
