@@ -9,11 +9,11 @@ var express = require("express"),
     LocalStrategy = require("passport-local"),
     methodOverride = require("method-override"),
     nodemailer = require('nodemailer'),
+
     passportLocalMongoose = require("passport-local-mongoose"),
     UserDetail = require("./models/userdetail"),
     RecUserDetail = require("./models/recuserdetails"),
     cloudinary = require("cloudinary"),
-    exphbs = require("express-handlebars"),
     upload = require('./public/js/multer'),
     flash = require('connect-flash'),
     session = require('express-session')
