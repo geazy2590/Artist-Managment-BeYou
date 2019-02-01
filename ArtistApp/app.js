@@ -135,11 +135,11 @@ app.post("/register", upload.single("image"), async (req, res) => {
 
         // setup email data with unicode symbols
         var mailOptions = {
-            from: '"Artist Management Team 👻" <akshaykumar771@gmail.com>', // sender address
-            to: username, // list of receivers
-            subject: "Registration Confirmed", // Subject line
-            text: "User registration successful!! Welcome to Artist Management App" // plain text body
-            // html body
+          from: '"Artist Management Team 👻" <akshaykumar771@gmail.com>', // sender address
+          to: username, // list of receivers
+          subject: "Registration Confirmed", // Subject line
+          text: "User registration successful!! Welcome to Artist Management App" // plain text body
+                                 // html body
         };
 
         // send mail with defined transport object
@@ -198,6 +198,39 @@ app.post("/registerrecruiter", function (req, res) {
             res.redirect("/homepage");
         });
     });
+    async function main(){
+
+        var account = await nodemailer.createTestAccount();
+      
+        // create reusable transporter object using the default SMTP transport
+        var transporter = nodemailer.createTransport({
+          host: "smtp.googlemail.com",
+          port: 587,
+          secure: false, // true for 465, false for other ports
+          auth: {
+            user: 'akshaykumar771@gmail.com', // generated ethereal user
+            pass: 'virendersehwag' // generated ethereal password
+          }
+        });
+      
+        // setup email data with unicode symbols
+        var mailOptions = {
+          from: '"Artist Management Team 👻" <akshaykumar771@gmail.com>', // sender address
+          to: username, // list of receivers
+          subject: "Registration Confirmed", // Subject line
+          text: "User registration successful!! Welcome to Artist Management App" // plain text body
+                                 // html body
+        };
+      
+        // send mail with defined transport object
+        let info = await transporter.sendMail(mailOptions)
+      
+        console.log("Message sent: %s", info.messageId);
+        // Preview only available when sending through an Ethereal account
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+      }
+      
+      main().catch(console.error);
 });
 
 function saveRecruiterDetails(uname, fname, lname) {
@@ -224,7 +257,7 @@ app.post('/login',
         successFlash: "Logged in successfully",
         failureFlash: true,
         failureFlash: 'Invalid username or password.',
-        failureRedirect: '/'
+        failureRedirect: '/?login=false'
     }));
 
 function isLoggedIn(req, res, next) {
