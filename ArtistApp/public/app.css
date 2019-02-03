@@ -85,3 +85,8 @@
 .card-img-top{
 	height: 300px;
 }
+
+.edit_thumb {
+	height: 250px;
+    display: inherit;
+}

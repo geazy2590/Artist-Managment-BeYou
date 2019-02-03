@@ -6,8 +6,8 @@
 		<div class="card">
 			<div class="card-body">
                 <h1 class="text-center">Edit Account</h1>
-                <form action="/update_details/<%= user.uid %>?_method=PUT" method="POST">
-                    <div class = "form-group">
+                <form action="/update_details/<%= user.uid %>" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
                         <label for="formGroupExampleInput" class="bmd-label-floating">First Name</label>
                         <input class = "form-control" required="" name = "FirstName" placeholder = "Firstname" value="<%= user.details.firstname %>">
                     </div>
@@ -35,7 +35,18 @@
                         <label for="formGroupExampleInput" class="bmd-label-floating">Shoe</label>
                         <input class = "form-control" required="" name = "Shoe" placeholder = "Shoe" value="<%= user.details.shoe %>">
                     </div>
-                    <div class = "form-group">
+                    <div class="form-group">
+                        <label for="formGroupExampleInput" class="bmd-label-floating">Picture</label>
+                        <img src="<%= user.details.picture %>" class="img-thumbnail edit_thumb" alt="User Images">
+                    </div>
+                    <div class="input-group">
+                        <div class="form-group">
+                            <label for="custom-file-label">Change image</label>
+                            <input type="file" accept="image/x-png,image/gif,image/jpeg" class="form-control-file" id="exampleFormControlFile1" name="image">
+                            <input type="hidden" name="existing_img" value="<%= user.details.picture %>">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="formGroupExampleInput" class="bmd-label-floating">Youtube Link</label>
                         <input class = "form-control" required="" name = "ytlink" placeholder = "Shoe" value="<%= user.details.ytlink %>">
                     </div>
