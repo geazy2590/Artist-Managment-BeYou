@@ -1,0 +1,24 @@
+<% include partials/header %>
+<% include partials/navbar %>
+<div class="container">
+    <form action="/profile/<%= id%>/contact" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" name = "email" aria-describedby="emailHelp" placeholder="Enter email" />
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Firstname</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" name = "firstname" aria-describedby="emailHelp" placeholder="Enter Firstname"/>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Lastname</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" name = "lastname" aria-describedby="emailHelp" placeholder="Enter Lastname" />
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Message</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" name = "message" rows="3" placeholder="Type message"></textarea>
+        </div>
+        <button type="Submit" class="btn btn-primary btn-raised">Send</button>
+    </form>
+</div>

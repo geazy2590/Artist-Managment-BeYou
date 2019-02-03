@@ -2,66 +2,48 @@
 <% include partials/navbar %>
 
 <div class="row">
-    <div class="col-md-4 col-xs-12 sign_up_card">
-        <div class="card">
-            <div class="card-body">
+	<div class="col-md-4 col-xs-12 sign_up_card">
+		<div class="card">
+			<div class="card-body">
                 <h1 class="text-center">Edit Account</h1>
-                <form action="/update_details/<%= user.uid %>" method="POST">
-                    <div class="form-group">
+                <form action="/update_details/<%= user.uid %>?_method=PUT" method="POST">
+                    <div class = "form-group">
                         <label for="formGroupExampleInput" class="bmd-label-floating">First Name</label>
-                        <input class="form-control" required="" name="FirstName" placeholder="Firstname" value="<%= user.details.firstname %>">
+                        <input class = "form-control" required="" name = "FirstName" placeholder = "Firstname" value="<%= user.details.firstname %>">
                     </div>
-                    <div class="form-group">
+                    <div class = "form-group">
                         <label for="formGroupExampleInput" class="bmd-label-floating">Last Name</label>
-                        <input class="form-control" required="" name="LastName" placeholder="Lastname" value="<%= user.details.lastname %>">
+                        <input class = "form-control" required="" name = "Lastname" placeholder = "Lastname" value="<%= user.details.lastname %>">
                     </div>
-                    <div class="form-group">
+                    <div class = "form-group">
                         <label for="formGroupExampleInput" class="bmd-label-floating">Email</label>
-                        <input class="form-control" required="" name="Email" placeholder="Email" value="<%= user.username %>">
+                        <input class = "form-control" required="" name = "Email" placeholder = "Email" value="<%= user.username %>">
                     </div>
-                    <div class="form-group">
-                        <label>Artist Type</label>
-                        <select class="form-control" id="ArtistType" name="Artist" value= "<%= user.artist %>">
-                            <option>Actor</option>
-                            <option>Model</option>
-                            <option>Singer</option>
-                            <option>Musician</option>
-                            <option>Painter</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Select Gender</label>
-                        <select class="form-control" id="Gender" name="Gender" value="<%= user.gender %>">
-                            <option>Male</option>
-                            <option>Female</option>
-                            <option>Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
+                    <div class = "form-group">
                         <label for="formGroupExampleInput" class="bmd-label-floating">Hair Colour</label>
-                        <input class="form-control" required="" name="Hair" placeholder="Hair" value="<%= user.details.haircolor %>">
+                        <input class = "form-control" required="" name = "Hair" placeholder = "Hair" value="<%= user.details.haircolor %>">
                     </div>
-                    <div class="form-group">
+                    <div class = "form-group">
                         <label for="formGroupExampleInput" class="bmd-label-floating">Eye Colour</label>
-                        <input class="form-control" required="" name="Eyes" placeholder="Eyes" value="<%= user.details.eyecolor %>">
+                        <input class = "form-control" required="" name = "Eyes" placeholder = "Eyes" value="<%= user.details.eyecolor %>">
                     </div>
-                    <div class="form-group">
+                    <div class = "form-group">
                         <label for="formGroupExampleInput" class="bmd-label-floating">Height</label>
-                        <input class="form-control" required="" name="Height" placeholder="Height" value="<%= user.details.height %>">
+                        <input class = "form-control" required="" name = "Height" placeholder = "Height" value="<%= user.details.height %>">
                     </div>
-                    <div class="form-group">
+                    <div class = "form-group">
                         <label for="formGroupExampleInput" class="bmd-label-floating">Shoe</label>
-                        <input class="form-control" required="" name="Shoe" placeholder="Shoe" value="<%= user.details.shoe %>">
+                        <input class = "form-control" required="" name = "Shoe" placeholder = "Shoe" value="<%= user.details.shoe %>">
                     </div>
-                    <div class="form-group">
+                    <div class = "form-group">
                         <label for="formGroupExampleInput" class="bmd-label-floating">Youtube Link</label>
-                        <input class="form-control" required="" name="ytlink" placeholder="Shoe" value="<%= user.details.ytlink %>">
+                        <input class = "form-control" required="" name = "ytlink" placeholder = "Shoe" value="<%= user.details.ytlink %>">
                     </div>
-                    <div class="form-group">
-                        <button class="btn btn-raised btn-success btn-block">Save Details</button>
+                    <div class = "form-group">
+                        <button class = "btn btn-raised btn-success btn-block">Save Details</button>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
+			</div>
+		</div>
+	</div>
 </div>

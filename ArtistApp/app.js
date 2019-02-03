@@ -18,6 +18,7 @@ var express = require("express"),
     flash = require('connect-flash'),
     session = require('express-session')
 
+    var username ;
 //Cloudinary configuration
 cloudinary.config({
     cloud_name: 'deuwergpo',
@@ -309,19 +310,8 @@ app.get("/profile/:_id", function (req, res) {
             console.log(err)
         } else {
             res.render('profile', {
-                artists: artists
+                artists: artists , id2: req.params._id
             });
-        }
-    });
-});
-
-//Get Edit profile details for user
-app.get("/edit_profile/:uid", function (req, res) {
-    UserDetail.findOne({ "uid": req.params.uid }, function (err, user) {
-        if (err) {
-            console.log(err)
-        } else {
-            res.render('edit_profile', { user: user });
         }
     });
 });
@@ -348,4 +338,87 @@ app.post('/update_details/:uid', function (req, res) {
             res.redirect('/homepage');
         }
     })
+});
+
+app.get("/profile/:id/contact", function (req, res) {
+    res.render("contact",{id: req.params.id});
+});
+
+app.post('/profile/:id/contact', function (req, res) {
+    UserDetail.findById(req.params.id, function (err, artists) {
+        
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(artists.username);
+            username = artists.username;
+
+            req.flash('success', 'Changes to your profile have been successfully saved.')
+            res.redirect('/homepage');
+        }
+    var output = `
+    <p>You have a new contact request</p>
+    <h3>Contact Details</h3>
+    <ul>
+        <li>Email: ${req.body.email}</li>
+        <li>FirstName: ${req.body.firstname}</li>
+        <li>LastName: ${req.body.lastname}</li>
+        
+    </ul> 
+    <h3>Message</h3>
+    <p>${req.body.contact_message}</p> `;
+    // var email = artists.username;
+    // if (err) {
+    //     console.log(err);
+    // } else {
+    //     res.redirect('/homepage');
+    // }
+    
+        
+    async function main(){
+
+        var account = await nodemailer.createTestAccount();
+      
+        // create reusable transporter object using the default SMTP transport
+        var transporter = nodemailer.createTransport({
+          host: "smtp.googlemail.com",
+          port: 587,
+          secure: false, // true for 465, false for other ports
+          auth: {
+            user: 'akshaykumar771@gmail.com', // generated ethereal user
+            pass: 'virendersehwag' // generated ethereal password
+          }
+        });
+      
+        // setup email data with unicode symbols
+        var mailOptions = {
+          from: '"Artist Management Team" <akshaykumar771@gmail.com>', // sender address
+          to: username, // list of receivers
+          subject: "Request from the recruiter", // Subject line
+          text: "Tetsing purpose", // plain text body
+          html:  output                      // html body
+        };
+        console.log(mailOptions);
+        // send mail with defined transport object
+        let info = await transporter.sendMail(mailOptions)
+      
+        console.log("Message sent: %s", info.messageId);
+        // Preview only available when sending through an Ethereal account
+        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+      }
+    
+      main().catch(console.error);
+});
+});
+
+
+//Get Edit profile details for user
+app.get("/edit_profile/:uid", function (req, res) {
+    UserDetail.findOne({ "uid": req.params.uid }, function (err, user) {
+        if (err) {
+            console.log(err)
+        } else {
+            res.render('edit_profile', { user: user });
+        }
+    });
 });
