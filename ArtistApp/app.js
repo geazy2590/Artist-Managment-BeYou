@@ -15,7 +15,6 @@ var express = require("express"),
     session = require('express-session'),
     flash = require('connect-flash')
 
-
 //Cloudinary configuration
 cloudinary.config({
     cloud_name: 'deuwergpo',
