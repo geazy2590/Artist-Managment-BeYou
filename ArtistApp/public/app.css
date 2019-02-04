@@ -20,7 +20,7 @@
 }
 
 .bg_background{
-	background-image: url(https://www.schiller.edu/wp-content/uploads/2017/09/stock_hd_medium.jpg);
+	background-image: url(https://i.pinimg.com/originals/a8/81/e3/a881e39b42461074d442ae53dd68ae26.jpg);
 	position: absolute;
 	z-index: -2;
 	height: 100%;
@@ -30,6 +30,24 @@
 .sign_up_card {
 	float: none;
     margin: 5% auto;
+}
+
+.login_card {
+	background: #ffffff00;
+    box-shadow: none;
+}
+
+.login_fields {
+	text-align: center;
+}
+
+.login_fields::placeholder {
+	color: #ffffff69;
+	text-align: center
+}
+
+.white_color {
+	color: #ffffff69 !important;
 }
 
 .center-hor {
@@ -78,7 +96,7 @@
 .notification_card {
 	position: absolute;
     z-index: 10;
-    right: 39%;
+    right: 38%;
     top: 1%;
 }
 

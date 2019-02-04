@@ -1,33 +1,31 @@
 <% include partials/header %>
 
 <div class="bg_background"></div>
-<div class="container">
+<div class="col-md-12">
 	<div class="title">
-		<h1> Be You </h1>
-		<h2 class="landing_text"> Artist Management </h2>
+		<img src="https://res.cloudinary.com/deuwergpo/image/upload/v1549293453/0d02e578-6de9-4838-a433-e949e2fc5d21.png">
 	</div>
 	<div class="row">
 			<div class="col-xs-12 sign_up_card">
-				<div class="card">
+				<div class="card login_card">
 					<div class="card-body">
-						<h2 class="text-center">Login</h2>
 						<form action="/login" method="POST">
 							<div class="form-group">
-								<input class="form-control" type="email" name="username" placeholder="Email">
+								<input class="form-control login_fields" type="email" name="username" placeholder="Email">
 							</div>
 							<div class="form-group">
-								<input class="form-control" type="password" name="password" placeholder="Password">
+								<input class="form-control login_fields" type="password" name="password" placeholder="Password">
 							</div>
 							<div class="form-group">
 								<button class="btn btn-raised btn-secondary btn-block">Login</button>
 							</div>
-							<p class="text-center">OR</p>
+							<p class="text-center white_color">OR</p>
 							<div class="row">
 								<div class="col-md-6 col-xs-12">
-									<a href="/register" class="btn btn-secondary">Sign Up as an Artist</a>
+									<a href="/register" class="btn btn-secondary white_color">Sign Up as an Artist</a>
 								</div>
 								<div class="col-md-6 col-xs-12">
-									<a href="/registerrecruiter" class="btn btn-secondary">Sign Up as a Recruiter</a>
+									<a href="/registerrecruiter" class="btn btn-secondary white_color">Sign Up as a Recruiter</a>
 								</div>
 							</div>
 						</form>
