@@ -118,14 +118,14 @@ app.post("/register", upload.single("image"), async (req, res) => {
             port: 587,
             secure: false, // true for 465, false for other ports
             auth: {
-                user: 'akshaykumar771@gmail.com', // generated ethereal user
-                pass: 'virendersehwag' // generated ethereal password
+                user: 'beyouinfoteam@gmail.com', // generated ethereal user
+                pass: 'beyou@123' // generated ethereal password
             }
         });
 
         // setup email data with unicode symbols
         var mailOptions = {
-            from: '"Artist Management Team 👻" <akshaykumar771@gmail.com>', // sender address
+            from: '"Team BeYOU" <beyouinfoteam@gmail.com>', // sender address
             to: username, // list of receivers
             subject: "Registration Confirmed", // Subject line
             text: "User registration successful!! Welcome to Artist Management App" // plain text body
@@ -198,14 +198,14 @@ app.post("/registerrecruiter", function (req, res) {
             port: 587,
             secure: false, // true for 465, false for other ports
             auth: {
-                user: 'akshaykumar771@gmail.com', // generated ethereal user
-                pass: 'virendersehwag' // generated ethereal password
+                user: 'beyouinfoteam@gmail.com', // generated ethereal user
+                pass: 'beyou@123' // generated ethereal password
             }
         });
 
         // setup email data with unicode symbols
         var mailOptions = {
-            from: '"Artist Management Team 👻" <akshaykumar771@gmail.com>', // sender address
+            from: '"Team BeYOU" <beyouinfoteam@gmail.com>', // sender address
             to: username, // list of receivers
             subject: "Registration Confirmed", // Subject line
             text: "User registration successful!! Welcome to Artist Management App" // plain text body
@@ -379,17 +379,17 @@ app.post('/contact/:_id', function (req, res) {
                 port: 587,
                 secure: false, // true for 465, false for other ports
                 auth: {
-                    user: 'akshaykumar771@gmail.com', // generated ethereal user
-                    pass: 'virendersehwag' // generated ethereal password
+                    user: 'beyouinfoteam@gmail.com', // generated ethereal user
+                pass: 'beyou@123' // generated ethereal password
                 }
             });
 
             // setup email data with unicode symbols
             var mailOptions = {
-                from: '"Artist Management Team" <akshaykumar771@gmail.com>', // sender address
+                from: '"Team BeYOU" <beyouinfoteam@gmail.com>', // sender address
                 to: username, // list of receivers
                 subject: "Contact Request from the recruiter", // Subject line
-                text: "Tetsing purpose", // plain text body
+                             // plain text body
                 html: output                      // html body
             };
 
