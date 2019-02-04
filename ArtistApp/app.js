@@ -145,7 +145,7 @@ app.post("/register", upload.single("image"), async (req, res) => {
 
     main().catch(console.error);
     } else {
-        req.flash('danger', 'Password and confirm password do not match');
+        req.flash('danger', 'Password and Confirm Password do not match');
         res.redirect('/register');
     }
 });
@@ -337,7 +337,7 @@ app.post('/update_details/:uid', upload.single("image"), async (req, res) => {
     }
     var updated = {
         firstname: req.body.FirstName,
-        lastname: req.body.Lastname,
+        lastname: req.body.LastName,
         username: req.body.Email,
         artist: req.body.Artist,
         gender: req.body.Gender,
