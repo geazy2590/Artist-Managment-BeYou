@@ -1,6 +1,6 @@
 <div class="col-md-3 notification_card" id="messages">
 <% Object.keys(messages).forEach(function (type) { %>
-  <div class="alert alert-<%= type %>" role="alert">
+  <div class="alert alert-<%= type %> text-center" role="alert">
   <% messages[type].forEach(function (message) { %>
     <%= message %>
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">

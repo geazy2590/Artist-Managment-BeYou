@@ -97,50 +97,57 @@ app.post("/register", upload.single("image"), async (req, res) => {
     var ytlink = req.body.ytlink;
     var picture = result.secure_url;
 
-    User.register(new User({ uid, username: req.body.username, type: 'artist' }), req.body.password, function (err, user) {
-        if (err) {
-            req.flash('Error', 'Oops! Something went wrong, please try again.')
-            return res.render('register');
-        }
-        passport.authenticate("local")(req, res, function () {
-            saveArtistDetails(uid, username, firstname, lastname, artist, gender, haircolor, eyecolor, shoe, height, ytlink, picture);
-            req.flash('success', 'You have successfully registered as an artist. Welcome to Be You!.')
-            res.redirect("/homepage");
-        });
-    });
-    async function main() {
+    if(req.body.password === req.body.confirmpassword){
 
-        var account = await nodemailer.createTestAccount();
-
-        // create reusable transporter object using the default SMTP transport
-        var transporter = nodemailer.createTransport({
-            host: "smtp.googlemail.com",
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
-                user: 'beyouinfoteam@gmail.com', // generated ethereal user
-                pass: 'beyou@123' // generated ethereal password
+        User.register(new User({ uid, username: req.body.username, type: 'artist' }), req.body.password, function (err, user) {
+            if (err) {
+                req.flash('danger', 'Oops! Something went wrong, please try again.')
+                return res.render('register');
             }
+            passport.authenticate("local")(req, res, function () {
+                saveArtistDetails(uid, username, firstname, lastname, artist, gender, haircolor, eyecolor, shoe, height, ytlink, picture);
+                req.flash('success', 'You have successfully registered as an artist. Welcome to Be You!.')
+                res.redirect("/homepage");
+            });
         });
+        
+        async function main() {
 
-        // setup email data with unicode symbols
-        var mailOptions = {
-            from: '"Team BeYOU" <beyouinfoteam@gmail.com>', // sender address
-            to: username, // list of receivers
-            subject: "Registration Confirmed", // Subject line
-            text: "User registration successful!! Welcome to Artist Management App" // plain text body
-            // html body
-        };
+            var account = await nodemailer.createTestAccount();
 
-        // send mail with defined transport object
-        let info = await transporter.sendMail(mailOptions)
+            // create reusable transporter object using the default SMTP transport
+            var transporter = nodemailer.createTransport({
+                host: "smtp.googlemail.com",
+                port: 587,
+                secure: false, // true for 465, false for other ports
+                auth: {
+                    user: 'beyouinfoteam@gmail.com', // generated ethereal user
+                    pass: 'beyou@123' // generated ethereal password
+                }
+            });
 
-        console.log("Message sent: %s", info.messageId);
-        // Preview only available when sending through an Ethereal account
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    }
+            // setup email data with unicode symbols
+            var mailOptions = {
+                from: '"Team BeYOU" <beyouinfoteam@gmail.com>', // sender address
+                to: username, // list of receivers
+                subject: "Registration Confirmed", // Subject line
+                text: "User registration successful!! Welcome to Artist Management App" // plain text body
+                // html body
+            };
+
+            // send mail with defined transport object
+            let info = await transporter.sendMail(mailOptions)
+
+            console.log("Message sent: %s", info.messageId);
+            // Preview only available when sending through an Ethereal account
+            console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        }
 
     main().catch(console.error);
+    } else {
+        req.flash('danger', 'Password and confirm password do not match');
+        res.redirect('/register');
+    }
 });
 
 function saveArtistDetails(uid, uname, fname, lname, artist, gender, haircolor, eyecolor, shoe, height, ytlink, picture) {
@@ -176,51 +183,55 @@ app.post("/registerrecruiter", function (req, res) {
     var firstname = req.body.firstname;
     var lastname = req.body.lastname;
 
-
-    User.register(new User({ username: req.body.username, type: 'recruiter' }), req.body.password, function (err, user) {
-        if (err) {
-            req.flash('error', 'Error', 'Oops! Something went wrong, please try again.')
-            return res.render('register');
-        }
-        passport.authenticate("local")(req, res, function () {
-            saveRecruiterDetails(username, firstname, lastname);
-            req.flash('success', 'You have successfully registered as a recruiter. Welcome to Be You!.')
-            res.redirect("/homepage");
-        });
-    });
-    async function main() {
-
-        var account = await nodemailer.createTestAccount();
-
-        // create reusable transporter object using the default SMTP transport
-        var transporter = nodemailer.createTransport({
-            host: "smtp.googlemail.com",
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
-                user: 'beyouinfoteam@gmail.com', // generated ethereal user
-                pass: 'beyou@123' // generated ethereal password
+    if(req.body.password === req.body.confirmpassword){
+        User.register(new User({ username: req.body.username, type: 'recruiter' }), req.body.password, function (err, user) {
+            if (err) {
+                req.flash('danger', 'Error', 'Oops! Something went wrong, please try again.')
+                return res.render('register');
             }
+            passport.authenticate("local")(req, res, function () {
+                saveRecruiterDetails(username, firstname, lastname);
+                req.flash('success', 'You have successfully registered as a recruiter. Welcome to Be You!.')
+                res.redirect("/homepage");
+            });
         });
+        async function main() {
 
-        // setup email data with unicode symbols
-        var mailOptions = {
-            from: '"Team BeYOU" <beyouinfoteam@gmail.com>', // sender address
-            to: username, // list of receivers
-            subject: "Registration Confirmed", // Subject line
-            text: "User registration successful!! Welcome to Artist Management App" // plain text body
-            // html body
-        };
+            var account = await nodemailer.createTestAccount();
 
-        // send mail with defined transport object
-        let info = await transporter.sendMail(mailOptions)
+            // create reusable transporter object using the default SMTP transport
+            var transporter = nodemailer.createTransport({
+                host: "smtp.googlemail.com",
+                port: 587,
+                secure: false, // true for 465, false for other ports
+                auth: {
+                    user: 'beyouinfoteam@gmail.com', // generated ethereal user
+                    pass: 'beyou@123' // generated ethereal password
+                }
+            });
 
-        console.log("Message sent: %s", info.messageId);
-        // Preview only available when sending through an Ethereal account
-        console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    }
+            // setup email data with unicode symbols
+            var mailOptions = {
+                from: '"Team BeYOU" <beyouinfoteam@gmail.com>', // sender address
+                to: username, // list of receivers
+                subject: "Registration Confirmed", // Subject line
+                text: "User registration successful!! Welcome to Artist Management App" // plain text body
+                // html body
+            };
+
+            // send mail with defined transport object
+            let info = await transporter.sendMail(mailOptions)
+
+            console.log("Message sent: %s", info.messageId);
+            // Preview only available when sending through an Ethereal account
+            console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+        }
 
     main().catch(console.error);
+    } else {
+        req.flash('danger', "Password and confirm password do not match.");
+        res.redirect('/registerrecruiter');
+    }
 });
 
 function saveRecruiterDetails(uname, fname, lname) {
@@ -258,6 +269,7 @@ function isLoggedIn(req, res, next) {
 //Logout
 app.get("/logout", function (req, res) {
     req.logout();
+    req.flash('success', 'You have logged out successfully!')
     res.redirect("/");
 });
 
@@ -280,7 +292,7 @@ app.get("/homepage/:artist", isLoggedIn, function (req, res) {
     var type = req.params.artist;
     UserDetail.find({ 'details.artist': type }, function (err, artists) {
         if (err) {
-            req.flash('error', 'Oops! Something went wrong, please try again. ')
+            req.flash('danger', 'Oops! Something went wrong, please try again. ')
             console.log(err);
         } else {
             res.render('homepage', {
@@ -294,7 +306,7 @@ app.get("/homepage/:artist", isLoggedIn, function (req, res) {
 app.get("/profile/:_id", isLoggedIn, function (req, res) {
     UserDetail.findById({ "_id": req.params._id }, function (err, artists) {
         if (err) {
-            req.flash('error', 'Oops! Something went wrong, please try again. ')
+            req.flash('danger', 'Oops! Something went wrong, please try again. ')
             console.log(err)
         } else {
             res.render('profile', {
@@ -308,7 +320,7 @@ app.get("/profile/:_id", isLoggedIn, function (req, res) {
 app.get("/edit_profile/:uid", function (req, res) {
     UserDetail.findOne({ "uid": req.params.uid }, function (err, user) {
         if (err) {
-            req.flash('error', 'Oops! Something went wrong, please try again. ')
+            req.flash('danger', 'Oops! Something went wrong, please try again. ')
             console.log(err)
         } else {
             res.render('edit_profile', { user: user });
@@ -339,7 +351,7 @@ app.post('/update_details/:uid', upload.single("image"), async (req, res) => {
 
     UserDetail.updateOne({ 'uid': req.params.uid }, { $set: { details: updated } }, function (err, artists) {
         if (err) {
-            req.flash('error', 'Oops! Something went wrong, please try again. ')
+            req.flash('danger', 'Oops! Something went wrong, please try again. ')
             console.log(err);
         } else {
             req.flash('sucess', 'Details successfully updated!')
@@ -351,7 +363,7 @@ app.post('/update_details/:uid', upload.single("image"), async (req, res) => {
 app.post('/contact/:_id', function (req, res) {
     UserDetail.findById(req.params._id, function (err, artists) {
         if (err) {
-            req.flash('error', 'Oops! Something went wrong, please try again. ')
+            req.flash('danger', 'Oops! Something went wrong, please try again. ')
             console.log(err);
         } else {
             username = artists.username;
@@ -411,7 +423,7 @@ app.post('/contact/:_id', function (req, res) {
 app.get("/edit_profile/:uid", isLoggedIn, function (req, res) {
     UserDetail.findOne({ "uid": req.params.uid }, function (err, user) {
         if (err) {
-            req.flash('error', 'Oops! Something went wrong, please try again. ')
+            req.flash('danger', 'Oops! Something went wrong, please try again. ')
             console.log(err)
         } else {
             res.render('edit_profile', { user: user });
