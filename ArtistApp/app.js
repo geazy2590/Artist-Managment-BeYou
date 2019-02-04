@@ -337,7 +337,7 @@ app.post('/update_details/:uid', upload.single("image"), async (req, res) => {
     }
     var updated = {
         firstname: req.body.FirstName,
-        lastname: req.body.LastName,
+        lastname: req.body.Lastname,
         username: req.body.Email,
         artist: req.body.Artist,
         gender: req.body.Gender,
