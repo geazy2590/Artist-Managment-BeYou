@@ -78,8 +78,8 @@
 .notification_card {
 	position: absolute;
     z-index: 10;
-    right: 0%;
-    top: 15%;
+    right: 39%;
+    top: 1%;
 }
 
 .card-img-top{

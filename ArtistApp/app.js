@@ -3,22 +3,19 @@ var express = require("express"),
     mongoose = require("mongoose"),
     passport = require("passport"),
     bodyParser = require("body-parser"),
-    flash = require("connect-flash"),
     cookieParser = require('cookie-parser'),
     User = require("./models/user"),
     LocalStrategy = require("passport-local"),
-    methodOverride = require("method-override"),
     nodemailer = require('nodemailer'),
-
     passportLocalMongoose = require("passport-local-mongoose"),
     UserDetail = require("./models/userdetail"),
     RecUserDetail = require("./models/recuserdetails"),
     cloudinary = require("cloudinary"),
     upload = require('./public/js/multer'),
-    flash = require('connect-flash'),
-    session = require('express-session')
+    session = require('express-session'),
+    flash = require('connect-flash')
 
-var username;
+
 //Cloudinary configuration
 cloudinary.config({
     cloud_name: 'deuwergpo',
@@ -54,23 +51,15 @@ app.use(require("express-session")({
     cookie: { maxAge: new Date(Date.now() + (60 * 1000 * 10)) }
 }));
 
-//Express messages middleware
-app.use(require('connect-flash')());
-app.use(function (req, res, next) {
-    res.locals.messages = require('express-messages')(req, res);
-    next();
-});
-
 //Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
-//Flash notifications
-app.use(flash());
 
 //Storing current user details
+app.use(require('connect-flash')());
 app.use(function (req, res, next) {
     res.locals.currentUser = req.user;
-    res.locals.message = req.flash();
+    res.locals.messages = require('express-messages')(req, res);
     next();
 });
 
@@ -110,12 +99,12 @@ app.post("/register", upload.single("image"), async (req, res) => {
 
     User.register(new User({ uid, username: req.body.username, type: 'artist' }), req.body.password, function (err, user) {
         if (err) {
-            req.f
+            req.flash('Error', 'Oops! Something went wrong, please try again.')
             return res.render('register');
         }
         passport.authenticate("local")(req, res, function () {
             saveArtistDetails(uid, username, firstname, lastname, artist, gender, haircolor, eyecolor, shoe, height, ytlink, picture);
-            req.flash('success', 'Your artist account has been created. Welcome to Be You!')
+            req.flash('success', 'You have successfully registered as an artist. Welcome to Be You!.')
             res.redirect("/homepage");
         });
     });
@@ -190,12 +179,12 @@ app.post("/registerrecruiter", function (req, res) {
 
     User.register(new User({ username: req.body.username, type: 'recruiter' }), req.body.password, function (err, user) {
         if (err) {
-            req.flash('Error', 'Something went wrong, please try again.')
+            req.flash('error', 'Error', 'Oops! Something went wrong, please try again.')
             return res.render('register');
         }
         passport.authenticate("local")(req, res, function () {
             saveRecruiterDetails(username, firstname, lastname);
-            req.flash('success', 'Your recruiter account has been created. Welcome to Be You!')
+            req.flash('success', 'You have successfully registered as a recruiter. Welcome to Be You!.')
             res.redirect("/homepage");
         });
     });
@@ -254,11 +243,9 @@ function saveRecruiterDetails(uname, fname, lname) {
 app.post('/login',
     passport.authenticate('local', {
         successRedirect: '/homepage',
-        successFlash: true,
-        successFlash: "Logged in successfully",
+        failureRedirect: '/',
         failureFlash: true,
-        failureFlash: 'Invalid username or password.',
-        failureRedirect: '/?login=false'
+        successFlash: 'You have successfully logged in!',
     }));
 
 function isLoggedIn(req, res, next) {
@@ -271,7 +258,6 @@ function isLoggedIn(req, res, next) {
 //Logout
 app.get("/logout", function (req, res) {
     req.logout();
-    req.flash("error", "You have Loggedout!!");
     res.redirect("/");
 });
 
@@ -294,6 +280,7 @@ app.get("/homepage/:artist", isLoggedIn, function (req, res) {
     var type = req.params.artist;
     UserDetail.find({ 'details.artist': type }, function (err, artists) {
         if (err) {
+            req.flash('error', 'Oops! Something went wrong, please try again. ')
             console.log(err);
         } else {
             res.render('homepage', {
@@ -304,13 +291,14 @@ app.get("/homepage/:artist", isLoggedIn, function (req, res) {
 })
 
 //Get Profile for user
-app.get("/profile/:_id", function (req, res) {
+app.get("/profile/:_id", isLoggedIn, function (req, res) {
     UserDetail.findById({ "_id": req.params._id }, function (err, artists) {
         if (err) {
+            req.flash('error', 'Oops! Something went wrong, please try again. ')
             console.log(err)
         } else {
             res.render('profile', {
-                artists: artists, id2: req.params._id
+                artists: artists
             });
         }
     });
@@ -320,6 +308,7 @@ app.get("/profile/:_id", function (req, res) {
 app.get("/edit_profile/:uid", function (req, res) {
     UserDetail.findOne({ "uid": req.params.uid }, function (err, user) {
         if (err) {
+            req.flash('error', 'Oops! Something went wrong, please try again. ')
             console.log(err)
         } else {
             res.render('edit_profile', { user: user });
@@ -330,7 +319,6 @@ app.get("/edit_profile/:uid", function (req, res) {
 app.post('/update_details/:uid', upload.single("image"), async (req, res) => {
     if (!req.file) {
         var new_img = req.body.existing_img;
-        console.log('OLD PIC = ' + new_img);
     } else {
         var result = await cloudinary.v2.uploader.upload(req.file.path);
         var new_img = result.secure_url;
@@ -348,12 +336,13 @@ app.post('/update_details/:uid', upload.single("image"), async (req, res) => {
         ytlink: req.body.ytlink,
         picture: new_img
     }
-    console.log(updated)
+
     UserDetail.updateOne({ 'uid': req.params.uid }, { $set: { details: updated } }, function (err, artists) {
         if (err) {
+            req.flash('error', 'Oops! Something went wrong, please try again. ')
             console.log(err);
         } else {
-            req.flash('success', 'Changes to your profile have been successfully saved.')
+            req.flash('sucess', 'Details successfully updated!')
             res.redirect('/homepage');
         }
     })
@@ -362,9 +351,11 @@ app.post('/update_details/:uid', upload.single("image"), async (req, res) => {
 app.post('/contact/:_id', function (req, res) {
     UserDetail.findById(req.params._id, function (err, artists) {
         if (err) {
+            req.flash('error', 'Oops! Something went wrong, please try again. ')
             console.log(err);
         } else {
             username = artists.username;
+            req.flash('success', 'Contact information successfully sent to artist.')
             res.redirect('/homepage');
         }
         var output = `
@@ -417,9 +408,10 @@ app.post('/contact/:_id', function (req, res) {
 
 
 //Get Edit profile details for user
-app.get("/edit_profile/:uid", function (req, res) {
+app.get("/edit_profile/:uid", isLoggedIn, function (req, res) {
     UserDetail.findOne({ "uid": req.params.uid }, function (err, user) {
         if (err) {
+            req.flash('error', 'Oops! Something went wrong, please try again. ')
             console.log(err)
         } else {
             res.render('edit_profile', { user: user });
