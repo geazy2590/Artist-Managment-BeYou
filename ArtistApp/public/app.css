@@ -94,7 +94,7 @@
 }
 
 .notification_card {
-	position: absolute;
+	position: fixed;
     z-index: 10;
     right: 38%;
     top: 1%;
@@ -107,4 +107,10 @@
 .edit_thumb {
 	height: 250px;
     display: inherit;
+}
+
+.alert-error {
+	color: #7f231c;
+    background-color: #fdd9d7;
+    border-color: #fccac7;
 }

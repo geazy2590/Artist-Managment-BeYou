@@ -13,28 +13,22 @@
                     </div>
                     <div class = "form-group">
                         <label for="formGroupExampleInput" class="bmd-label-floating">Last Name</label>
-                        <input class = "form-control" required="" name = "LastName" placeholder = "Lastname" value="<%= user.details.lastname %>">
+                        <input class = "form-control" required="" name = "Lastname" placeholder = "Lastname" value="<%= user.details.lastname %>">
                     </div>
                     <div class = "form-group">
                         <label for="formGroupExampleInput" class="bmd-label-floating">Email</label>
-                        <input class = "form-control" required="" name = "Email" placeholder = "Email" value="<%= user.username %>">
+                        <input class = "form-control" required="" name = "Email" placeholder = "Email" value="<%= user.username %>" disabled>
                     </div>
                     <div class="form-group">
                         <label>Artist Type</label>
-                        <select class="form-control" id="ArtistType" name="Artist">
-                            <option>Actor</option>
-                            <option>Model</option>
-                            <option>Singer</option>
-                            <option>Musician</option>
-                            <option>Painter</option>
+                        <select class="form-control" id="ArtistType" name="Artist" disabled>
+                            <option><%= user.details.artist %></option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Select Gender</label>
-                        <select class="form-control" id="Gender" name="Gender">
-                            <option>Male</option>
-                            <option>Female</option>
-                            <option>Other</option>
+                        <select class="form-control" id="Gender" name="Gender" disabled>
+                            <option><%= user.details.gender %></option>
                         </select>
                     </div>
                     <div class = "form-group">
