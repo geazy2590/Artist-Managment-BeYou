@@ -2,7 +2,7 @@
 
 <h2>Team</h2>
 
-Akshay Kumar Tadapathri and Gautam Rattihalli (11011856)
+Akshay Kumar Tadapathri (11011848) and Gautam Rattihalli (11011856)
 
 <h2>Features of the Application</h2>
 <p>
