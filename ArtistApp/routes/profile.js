@@ -5,7 +5,7 @@ var express = require("express"),
     cloudinary = require('../helpers/cloudinary').cloudinary
 
 //Get Profile for user
-router.get("/profile/:_id", function (req, res) {
+router.get("/:_id", function (req, res) {
     UserDetail.findById({ "_id": req.params._id }, function (err, artists) {
         if (err) {
             req.flash('danger', 'Oops! Something went wrong, please try again. ')

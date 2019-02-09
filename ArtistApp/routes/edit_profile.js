@@ -36,7 +36,7 @@ router.post('/:uid', upload.single("image"), async (req, res) => {
         ytlink: req.body.ytlink,
         picture: new_img
     }
-
+    console.log(updated);
     UserDetail.updateOne({ 'uid': req.params.uid }, { $set: { details: updated } }, function (err, artists) {
         if (err) {
             req.flash('danger', 'Oops! Something went wrong, please try again. ')
