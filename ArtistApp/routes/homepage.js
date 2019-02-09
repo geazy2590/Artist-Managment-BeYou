@@ -4,7 +4,7 @@ var express = require("express"),
     RecUserDetail = require("../models/recuserdetails")
 
 //Show all artists and filter artists on homepage
-router.get("/homepage", function (req, res) {
+router.get("/", function (req, res) {
     var type = req.params.artist;
     UserDetail.find({}, function (err, artists) {
         if (err) {
@@ -17,7 +17,7 @@ router.get("/homepage", function (req, res) {
     })
 })
 
-router.get("/homepage/:artist", function (req, res) {
+router.get("/:artist", function (req, res) {
     var type = req.params.artist;
     UserDetail.find({ 'details.artist': type }, function (err, artists) {
         if (err) {

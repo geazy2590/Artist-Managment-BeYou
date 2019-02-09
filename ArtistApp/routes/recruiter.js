@@ -1,15 +1,12 @@
 var express = require("express"),
-    upload = require('../helpers/multer'),
+    router = express.Router(),
     passport = require("passport"),
     LocalStrategy = require("passport-local"),
-    cloudinary = require('../helpers/cloudinary').cloudinary,
-    router = express.Router(),
     User = require("../models/user"),
-    UserDetail = require("../models/userdetail"),
     RecUserDetail = require("../models/recuserdetails"),
     nodemailer = require('nodemailer')
 
-
+//Passport Init
 var app = express();
 app.use(passport.initialize());
 app.use(passport.session());
@@ -26,41 +23,28 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
-//Registration of Artist
+//Registration for recruiter
 router.get("/", function (req, res) {
-    res.render("register");
+    res.render("registerrecruiter");
 });
 
-router.post("/", upload.single("image"), async (req, res) => {
-    var result = await cloudinary.v2.uploader.upload(req.file.path);
-    var uid = Date.now();
-    var username = req.body.username;
+router.post("/", function (req, res) {
+    var username = req.body.username
     var firstname = req.body.firstname;
     var lastname = req.body.lastname;
-    var artist = req.body.artist;
-    var gender = req.body.gender;
-    var haircolor = req.body.haircolor;
-    var eyecolor = req.body.eyecolor;
-    var shoe = req.body.shoe;
-    var height = req.body.height;
-    var ytlink = req.body.ytlink;
-    var picture = result.secure_url;
 
     if(req.body.password === req.body.confirmpassword){
-
-        User.register(new User({ uid: uid, username: req.body.username, type: 'artist' }), req.body.password, function (err, user) {
+        User.register(new User({ username: req.body.username, type: 'recruiter' }), req.body.password, function (err, user) {
             if (err) {
-                req.flash('danger', 'Oops! Something went wrong, please try again.')
-                return res.render('register');
+                req.flash('danger', 'Error', 'Oops! Something went wrong, please try again.')
+                return res.render('registerrecruiter');
             }
             passport.authenticate("local")(req, res, function () {
-                saveArtistDetails(uid, username, firstname, lastname, artist, gender, haircolor, eyecolor, shoe, height, ytlink, picture);
-                req.flash('success', 'You have successfully registered as an artist. Welcome to Be You!.')
+                saveRecruiterDetails(username, firstname, lastname);
+                req.flash('success', 'You have successfully registered as a recruiter. Welcome to Be You!.')
                 res.redirect("/homepage");
             });
         });
-        
         async function main() {
 
             var account = await nodemailer.createTestAccount();
@@ -95,31 +79,24 @@ router.post("/", upload.single("image"), async (req, res) => {
 
     main().catch(console.error);
     } else {
-        req.flash('danger', 'Password and confirm password do not match');
-        res.redirect('/register');
+        req.flash('danger', "Password and confirm password do not match.");
+        res.redirect('/recruiter');
     }
 });
 
-function saveArtistDetails(uid, uname, fname, lname, artist, gender, haircolor, eyecolor, shoe, height, ytlink, picture) {
+function saveRecruiterDetails(uname, fname, lname) {
     var newUser = {
-        uid: uid,
         username: uname,
-        type: "artist",
-        details: {
-            firstname: fname,
-            lastname: lname,
-            artist: artist,
-            gender: gender,
-            haircolor: haircolor,
-            eyecolor: eyecolor,
-            shoe: shoe,
-            height: height,
-            ytlink: ytlink,
-            picture: picture
-        }
+        type: "recruiter",
+        firstname: fname,
+        lastname: lname,
+
     }
-    UserDetail.create(newUser, function (err, user) {
+    RecUserDetail.create(newUser, function (err, user) {
         if (err) { console.log(err); }
+        else {
+            console.log(user);
+        }
     })
 }
 

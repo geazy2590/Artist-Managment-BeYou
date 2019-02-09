@@ -2,7 +2,7 @@ var express = require("express"),
     router = express.Router(),
     nodemailer = require('nodemailer')
 
-router.post('/contact/:_id', function (req, res) {
+router.post('/:_id', function (req, res) {
     UserDetail.findById(req.params._id, function (err, artists) {
         if (err) {
             req.flash('danger', 'Oops! Something went wrong, please try again. ')

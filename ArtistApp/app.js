@@ -6,7 +6,6 @@ var express = require("express"),
     cookieParser = require('cookie-parser'),
     User = require("./models/user"),
     LocalStrategy = require("passport-local"),
-    nodemailer = require('nodemailer'),
     passportLocalMongoose = require("passport-local-mongoose"),
     UserDetail = require("./models/userdetail"),
     RecUserDetail = require("./models/recuserdetails"),
@@ -66,9 +65,13 @@ app.get("/", function (req, res) {
 });
 
 
-//Registeration routes
+//Artist Registration routes
 let register = require('./routes/registration');
 app.use('/register', register)
+
+//Artist Registration routes
+let recruiter = require('./routes/recruiter');
+app.use('/recruiter', recruiter)
 
 //Homepage routes
 let homepage = require('./routes/homepage');
@@ -77,6 +80,10 @@ app.use('/homepage', homepage)
 //Profile routes
 let profile = require('./routes/profile');
 app.use('/profile', profile)
+
+//Profile routes
+let edit_profile = require('./routes/edit_profile');
+app.use('/edit_profile', edit_profile)
 
 //contact form
 let contact = require('./routes/contact');
