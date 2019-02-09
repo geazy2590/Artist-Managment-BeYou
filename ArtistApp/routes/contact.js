@@ -1,6 +1,9 @@
 var express = require("express"),
     router = express.Router(),
-    nodemailer = require('nodemailer')
+    nodemailer = require('nodemailer'),
+    User = require("../models/user"),
+    UserDetail = require("../models/userdetail"),
+    RecUserDetail = require("../models/recuserdetails")
 
 router.post('/:_id', function (req, res) {
     UserDetail.findById(req.params._id, function (err, artists) {
